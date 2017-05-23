@@ -1,0 +1,38 @@
+<template>
+   <div id="CommonCell">
+     <h1></h1>
+     <h2></h2>
+   </div>
+
+   <div style="background-color: darkgrey;width: 100%;height: 1px"></div>
+
+   <div style="display: flex;flex-direction: row;justify-content: center">
+     <img style="width: 30px;height: 30px" src="../assets/logo"></img>
+     <h1></h1>
+
+   </div>
+</template>
+
+
+<script>
+    export default{
+        data(){
+            return{
+                time:"",
+                content:"",
+                status:"",
+                department:""
+            }
+        },
+        prop(){
+
+        }
+    }
+</script>
+
+<style>
+  h1,h2{
+    font-weight: normal;
+  }
+
+</style>
