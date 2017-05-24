@@ -2,20 +2,15 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import FastClick from 'fastclick'
-import VueRouter from 'vue-router'
 import App from './App'
-import Detail from './view/ComplainDetail.vue'
+import axios from './utils/diyaxios'
+import {sync} from 'vuex-router-sync'
+import store from './store'
+import router from './router'
 
-Vue.use(VueRouter)
+sync(store, router)
 
-const routes = [{
-  path: '/',
-  component: Detail
-}]
-
-const router = new VueRouter({
-  routes
-})
+Vue.prototype.$http = axios
 
 FastClick.attach(document.body)
 
@@ -24,5 +19,6 @@ Vue.config.productionTip = false
 /* eslint-disable no-new */
 new Vue({
   router,
+  store,
   render: h => h(App)
 }).$mount('#app-box')
