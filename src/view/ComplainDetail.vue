@@ -1,11 +1,33 @@
 <template>
     <div>
-      <panel li></panel>
+      <group label-width="4.5em" label-margin-right="2em" label-align="right">
+        <cell title="投诉时间" value="value" >
+          <img slot="icon" width="20" style="display:block;margin-right:5px;" src="../assets/logo.png">
+        </cell>
+        <cell title="处理状态" value="value" >
+          <img slot="icon" width="20" style="display:block;margin-right:5px;" src="../assets/logo.png">
+        </cell>
+        <cell title="单号" value="value" >
+          <img slot="icon" width="20" style="display:block;margin-right:5px;" src="../assets/logo.png">
+        </cell>
+        <cell title="购买平台" value="value" >
+          <img slot="icon" width="20" style="display:block;margin-right:5px;" src="../assets/logo.png">
+        </cell>
+        <cell title="购买门店" value="value" >
+          <img slot="icon" width="20" style="display:block;margin-right:5px;" src="../assets/logo.png">
+        </cell>
+        <cell title="客户电话" value="value" >
+          <img slot="icon" width="20" style="display:block;margin-right:5px;" src="../assets/logo.png">
+        </cell>
+        <cell title="投诉类型" value="value" >
+          <img slot="icon" width="20" style="display:block;margin-right:5px;" src="../assets/logo.png">
+        </cell>
+      </group>
     </div>
 </template>
 
 <script>
-import { Group, Cell, Scroller, Panel} from 'vux'
+import { Group, Cell, Scroller, Panel } from 'vux'
 
 export default {
   components: {
@@ -16,14 +38,7 @@ export default {
   },
   data () {
     return {
-      type: '1',
-      list: [{
-        title: '标题一',
-        desc: '由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。',
-      }, {
-        title: '标题二',
-        desc: '由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。',
-      }],
+      value: '123'
 
     }
   }
