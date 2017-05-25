@@ -18,6 +18,6 @@ export function fetchSearchByWorkId (jobNum, page = 1, limit = 20) {
 
 // 根据id获取客服详情
 export function fetchItemById (id) {
-  return fetch(`/result/wx/2`)
+  return fetch(`/result/wx/${id}`)
 }
 
