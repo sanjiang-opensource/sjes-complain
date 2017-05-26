@@ -20,12 +20,7 @@ export default {
   },
   data () {
     return {
-      list: [
-        'https://o5omsejde.qnssl.com/demo/test1.jpg',
-        'https://o5omsejde.qnssl.com/demo/test2.jpg',
-        'https://o5omsejde.qnssl.com/demo/test0.jpg',
-        'https://o5omsejde.qnssl.com/demo/test4.jpg',
-      ]
+      list: []
     }
   }
 }

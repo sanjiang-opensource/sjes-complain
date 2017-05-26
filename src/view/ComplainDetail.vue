@@ -30,7 +30,7 @@
       <divider style="display: flex;margin-bottom: 10px">投诉内容</divider>
       <div style="background-color: white;display: flex;margin-bottom: 20px;flex-direction: column">
         <cell inline-desc="ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss" style="word-break: break-all"></cell>
-        <cell title="现场照片"  :onclick="toComplainImage" link="/image"></cell>
+        <cell title="现场照片" link="/image"></cell>
       </div>
 
       <divider style="display: flex;margin-bottom: 10px">转单详情</divider>
@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import { Group, Cell, Scroller, Divider , XTextarea, XInput, XButton, XHeader} from 'vux'
+import { Group, Cell, Scroller, Divider, XTextarea, XInput, XButton, XHeader } from 'vux'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -74,32 +74,18 @@ export default {
     Cell,
     Scroller,
     Divider,
-  XTextarea,
-XInput,
-XButton,
-XHeader
+    XTextarea,
+    XInput,
+    XButton,
+    XHeader
   },
-
-  methods : {
-      toComplainImage: function () {
-        let imagePaths = complainDetail.imagePaths;
-        this.$router.push({
-          name: 'Image',
-          param: {
-              list: imagePaths
-          }
-        })
-
-      }
-  },
-    computed: mapGetters({
-      complainDetail: 'complainDetail'
-    }),
-    created () {
-      this.$store.dispatch('getComplainDetail', this.$route.params.id)
-    }
-
+  computed: mapGetters({
+    complainDetail: 'complainDetail'
+  }),
+  created () {
+    this.$store.dispatch('getComplainDetail', this.$route.params.id)
   }
+}
 </script>
 
 <style>

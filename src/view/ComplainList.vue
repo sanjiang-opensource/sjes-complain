@@ -70,14 +70,14 @@
         }
         return status
       },
-      getOverTimeName: function(value){
-          let overTimeName = ''
-          if (value === 1){
-              overTimeName = '超时'
-          } else {
-              overTimeName = '未超时'
-          }
-          return overTimeName
+      getOverTimeName: function (value) {
+        let overTimeName = ''
+        if (value === 1) {
+          overTimeName = '超时'
+        } else {
+          overTimeName = '未超时'
+        }
+        return overTimeName
       },
       onInfinite () {
         this.page = this.list.length / this.size + 1
