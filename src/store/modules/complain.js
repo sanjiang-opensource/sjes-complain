@@ -2,7 +2,10 @@ import * as types from '../mutation-types'
 import * as api from '../../api'
 
 const state = {
-  complainDetail: {}
+  complainDetail: {
+    customerComplainWxModel: {},
+    complainResults: []
+  }
 }
 
 const getters = {
@@ -19,6 +22,7 @@ const actions = {
   getComplainDetail ({commit}, id) {
     api.fetchItemById(id)
       .then(data => {
+        console.log(data)
         commit(types.GET_COMPLAIN_ID, data)
       })
   }
