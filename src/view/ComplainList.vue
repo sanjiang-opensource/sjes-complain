@@ -1,88 +1,97 @@
 <template>
-  <div >
+  <view-box ref="viewBox">
+    <div class="box" v-for="info in list">
+      <cell title="投诉时间 ：" :value="timeToString(info.complainTime)" value-align="left" label-margin-left="2em"></cell>
+      <cell title="受理部门 ：" :value="info.receiveDept" value-align="left" label-margin-left="2em"></cell>
+      <cell title="投诉内容 ：" :inline-desc="info.complainContent"
+            style="word-break: break-all "></cell>
+      <div style="width: 100%;height: 1px;background-color: #e1e1e1"></div>
+      <cell title="超时" :value="getStatusName(info.complainStat)" style="height: 60px;color: red;" :link="'/Detail/'+info.id">
+        <img slot="icon" width="25" style="display:block;margin-right:5px;" src="../assets/logo.png">
+      </cell>
+    </div>
+    <infinite-loading :on-infinite="onInfinite" ref="infiniteLoading" spinner="circles">
+          <span slot="no-more">
+           数据加载完毕！
+          </span>
+    </infinite-loading>
 
-    <!--<group style="width: 100%"  label-margin-right="2em" label-align="left" link="/Detail">-->
-      <div class="box" v-for="info in list">
+  </view-box>
 
-          <cell title="投诉时间 ：" value="2017-5-25" value-align="left" label-margin-left="2em" ></cell>
-          <cell title="受理部门 ：" value="全渠道" value-align="left" label-margin-left="2em"></cell>
-          <cell title="投诉内容 ：" inline-desc="老包总有问题老包总有问题老包总有问题老包总有问题老包总有问题老包总有问题老包总有问题老包总有问题老包总有问题老包总有问题" style="word-break: break-all "></cell>
-          <div style="width: 100%;height: 1px;background-color: #e1e1e1"></div>
-          <cell title="超时" value="处理中" style="height: 60px;color: red;" link="/Detail/2">
-            <img slot="icon" width="25" style="display:block;margin-right:5px;" src="../assets/logo.png">
-          </cell>
 
-      </div>
-    <!--</group>-->
-
-  </div>
 </template>
 
 <script>
-import { Group, Cell} from 'vux'
+  import InfiniteLoading from 'vue-infinite-loading'
+  import {ViewBox, Cell} from 'vux'
+  import * as api from '../api'
 
-export default {
-  components: {
-    Group,
-    Cell
-  },
-  data () {
-    return {
-      header:"",
-      list: [{
-        src: 'http://placeholder.qiniudn.com/60x60/3cc51f/ffffff',
-        title: '标题一',
-        desc: '由各种。',
-        url: '/component/cell'
-      }, {
-        src: 'http://placeholder.qiniudn.com/60x60/3cc51f/ffffff',
-        title: '标题二',
-        desc: '由各种',
-        url: {
-          path: '/component/radio',
-          replace: false
-        }
-      }, {
-        src: 'http://placeholder.qiniudn.com/60x60/3cc51f/ffffff',
-        title: '标题二',
-        desc: '由各种',
-        url: {
-          path: '/component/radio',
-          replace: false
-        }
-      }, {
-        src: 'http://placeholder.qiniudn.com/60x60/3cc51f/ffffff',
-        title: '标题二',
-        desc: '由各种',
-        url: {
-          path: '/component/radio',
-          replace: false
-        }
-      }, {
-        src: 'http://placeholder.qiniudn.com/60x60/3cc51f/ffffff',
-        title: '标题二',
-        desc: '由各种',
-        url: {
-          path: '/component/radio',
-          replace: false
-        }
-      }],
-      footer:"查看更多",
-      items:[
-        {messgae:""}
-      ]
-    }
-  },
-  methods: {
-      toDetail: function () {
-        this.$router.push({
-            path: '/Detail'
-        })
+  export default {
+    components: {
+      ViewBox,
+      Cell,
+      InfiniteLoading
+    },
+    data () {
+      return {
+        header: '',
+        isScroll: false,
+        workerId: null,
+        page: 1,
+        size: 10,
+        list: [],
+        footer: '查看更多',
+        items: [
+          {messgae: ''}
+        ]
       }
+    },
+    mounted () {
+      this.workerId = this.$route.params.workerId
+      this.page = this.$route.params.page
+      this.size = this.$route.params.size
+    },
+    computed: {
+    },
+    methods: {
+      getStatusName: function (value) {
+        let status = ''
+        if (value === 1) {
+          status = '待处理'
+        } else if (value === 2) {
+          status = '已完成'
+        } else {
+          status = '已关闭'
+        }
+        return status
+      },
+      onInfinite () {
+        this.page = this.list.length / this.size + 1
+        api.fetchSearchByWorkId(this.workerId, this.page, this.size)
+          .then((res) => {
+            if (res.list.length) {
+              this.list = this.list.concat(res.list)
+              this.$refs.infiniteLoading.$emit('$InfiniteLoading:loaded')
+              let totalCount = res.totalCount
+              if (this.list.length - totalCount === 0) {
+                this.$refs.infiniteLoading.$emit('$InfiniteLoading:complete')
+              }
+            } else {
+              this.$refs.infiniteLoading.$emit('$InfiniteLoading:complete')
+            }
+          })
+      },
+      timeToString (value) {
+        if (value !== '') {
+          return value[0] + '-' + value[1] + '-' + value[2] + ' ' + value[3] + ':' + value[4] + ':' + (value[5] === undefined ? '00' : value[5])
+        }
+      }
+    },
+    destoryed () {
+      this.$store.dispatch('CLEAN_LIST')
+    }
   }
-}
 </script>
-
 
 
 <style>
