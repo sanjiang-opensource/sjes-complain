@@ -3,12 +3,19 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
     {
-      path: '/',
+      path: '/Detail/:id',
       name: 'Detail',
       component: require('../view/ComplainDetail.vue')
+    },
+    {
+      path: '/list/:workerId/:page/:size',
+      name: 'DetailList',
+      component: require('../view/ComplainList.vue')
     }
   ]
 })
+
+export default router
