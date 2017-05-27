@@ -1,7 +1,7 @@
 <template>
   <div>
     <x-header style="position: fixed;z-index: 9999;width: 100%;height: 50px;top:0px">投诉详情</x-header>
-    <view-box ref="viewBox" style="display: flex;margin-top: 50px;flex-direction: column">
+    <section class="grid" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
       <div v-for="info in list" style="display: flex;flex-direction: column;margin-bottom: 20px;position: relative;width: 100%;background-color: white">
         <cell title="投诉时间 ：" :value="timeToString(info.complainTime)" value-align="left" label-margin-left="2em"></cell>
         <cell title="受理部门 ：" :value="info.receiveDept" value-align="left" label-margin-left="2em"></cell>
@@ -12,13 +12,14 @@
           <img slot="icon" width="25" style="display:block;margin-right:5px;" src="../assets/logo.png">
         </cell>
       </div>
-      <infinite-loading :on-infinite="onInfinite" ref="infiniteLoading" spinner="circles">
-          <span slot="no-more">
-           数据加载完毕！
-          </span>
-      </infinite-loading>
+      <Spinner :show="loading"></Spinner>
+      <!--<infinite-loading :on-infinite="onInfinite" ref="infiniteLoading" spinner="circles">-->
+          <!--<span slot="no-more">-->
+           <!--数据加载完毕！-->
+          <!--</span>-->
+      <!--</infinite-loading>-->
 
-    </view-box>
+    </section>
   </div>
 
 
@@ -26,7 +27,9 @@
 </template>
 
 <script>
-  import InfiniteLoading from 'vue-infinite-loading'
+//  import InfiniteLoading from 'vue-infinite-loading'
+  import Spinner from '../components/Spinner.vue'
+  import InfiniteScroll from 'vue-infinite-scroll'
   import {ViewBox, Cell, XHeader} from 'vux'
   import * as api from '../api'
 
@@ -34,21 +37,22 @@
     components: {
       ViewBox,
       Cell,
-      InfiniteLoading,
-      XHeader
+      XHeader,
+      Spinner
     },
+    directives: {InfiniteScroll},
     data () {
       return {
         header: '',
         isScroll: false,
+        busy: false,
         workerId: null,
-        page: 1,
-        size: 10,
         list: [],
         footer: '查看更多',
         items: [
           {messgae: ''}
-        ]
+        ],
+        loading: true
       }
     },
     mounted () {
@@ -79,22 +83,38 @@
         }
         return overTimeName
       },
-      onInfinite () {
-        this.page = this.list.length / this.size + 1
-        api.fetchSearchByWorkId(this.workerId, this.page, this.size)
-          .then((res) => {
-            if (res.list.length) {
-              this.list = this.list.concat(res.list)
-              this.$refs.infiniteLoading.$emit('$InfiniteLoading:loaded')
-              let totalCount = res.totalCount
-              if (this.list.length - totalCount === 0) {
-                this.$refs.infiniteLoading.$emit('$InfiniteLoading:complete')
-              }
-            } else {
-              this.$refs.infiniteLoading.$emit('$InfiniteLoading:complete')
+      loadMore () {
+        let page = this.list.length / this.size + 1
+        this.busy = true
+        this.isScroll = true
+        api.fetchSearchByWorkId(this.workerId, page, this.size)
+          .then(res => {
+            this.list = this.list.concat(res.list)
+            let totalCount = res.totalCount
+            if (this.list.length < totalCount) {
+              this.busy = false
+              console.log(this.busy)
             }
+            this.loading = false
+            this.isScroll = false
           })
       },
+//      onInfinite () {
+//        this.page = this.list.length / this.size + 1
+//        api.fetchSearchByWorkId(this.workerId, this.page, this.size)
+//          .then((res) => {
+//            if (res.list.length) {
+//              this.list = this.list.concat(res.list)
+//              this.$refs.infiniteLoading.$emit('$InfiniteLoading:loaded')
+//              let totalCount = res.totalCount
+//              if (this.list.length - totalCount === 0) {
+//                this.$refs.infiniteLoading.$emit('$InfiniteLoading:complete')
+//              }
+//            } else {
+//              this.$refs.infiniteLoading.$emit('$InfiniteLoading:complete')
+//            }
+//          })
+//      },
       timeToString (value) {
         if (value !== '') {
           return value[0] + '-' + value[1] + '-' + value[2] + ' ' + value[3] + ':' + value[4] + ':' + (value[5] === undefined ? '00' : value[5])
