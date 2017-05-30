@@ -21,7 +21,7 @@ const router = new Router({
       component: require('../view/ComplainDetail.vue')
     },
     {
-      path: '/:workerId/:page/:size',
+      path: '/:workerId',
       name: 'DetailList',
       component: require('../view/ComplainList.vue')
     }

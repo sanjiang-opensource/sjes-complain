@@ -8,7 +8,9 @@ export const GET_CURRENT_PAGE = 'CURRENT_PAGE'
 export const GET_TOTAL_COUNT = 'GET_TOTAL_PAGE'
 // 清空列表
 export const CLEAN_LIST = 'CLEAN_LIST'
-
+// 清空详情
+export const CLEAN_DETAIL = 'CLEAN_DETAIL'
+//
 export const SET_INFINITE_BUSY = 'SET_INFINITE_BUSY'
 // 转单
 export const RETURN_COMPLAIN = 'RETURN_COMPLAIN'
@@ -16,3 +18,7 @@ export const RETURN_COMPLAIN = 'RETURN_COMPLAIN'
 export const SUBMIT_COMPLAIN = 'SUBMIT_COMPLAIN'
 // 关闭
 export const CLOSE_COMPLAIN = 'CLOSE_COMPLAIN'
+// 获取门店列表
+export const SHOP_LIST = 'SHOP_LIST'
+// 清空门店列表
+export const CLEAN_SHOP_LIST = 'CLEAN_SHOP_LIST'

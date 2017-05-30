@@ -15,6 +15,9 @@ const getters = {
 const mutations = {
   [types.GET_COMPLAIN_ID] (state, data) {
     state.complainDetail = data
+  },
+  [types.CLEAN_DETAIL] (state) {
+    state.complainDetail = {}
   }
 }
 
@@ -25,6 +28,9 @@ const actions = {
         console.log(data)
         commit(types.GET_COMPLAIN_ID, data)
       })
+  },
+  [types.CLEAN_DETAIL] ({commit}) {
+    commit(types.CLEAN_DETAIL)
   }
 }
 

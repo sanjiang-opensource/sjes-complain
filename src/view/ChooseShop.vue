@@ -2,7 +2,7 @@
   <div>
     <div style="display: flex;flex-direction: row;position: relative;align-items: center;margin-bottom: 10px;background-color: white" v-for="info in list">
 
-      <cell title="00016" value="胜丰商场" style="width: 70%">
+      <cell :title="info.shopId" :value="info.shopName" style="width: 70%">
         <img slot="icon" width="20" style="display:block;margin-right:5px;" src="../assets/logo.png">
       </cell>
 
@@ -14,6 +14,7 @@
 
 <script>
 import {XImg, Cell, XButton} from 'vux'
+import {mapGetters} from 'vuex'
 
 export default {
   components: {
@@ -23,21 +24,16 @@ export default {
   },
   data () {
     return {
-      list: [
-        {
-
-        },
-        {
-
-        },
-        {
-
-        },
-        {
-
-        }
-      ]
+      list: []
     }
+  },
+  computed: mapGetters({
+    list: 'content'
+  }),
+  created () {
+    this.$store.dispatch('getShopList', '曙光')
+  },
+  methods: {
   }
 }
 </script>
