@@ -33,7 +33,7 @@
       <div style="background-color: white;display: flex;margin-bottom: 20px;flex-direction: column">
         <cell :inline-desc="complainDetail.customerComplainWxModel.complainContent"
               style="word-break: break-all"></cell>
-        <cell title="现场照片" link="/image"></cell>
+        <button style="width: 100%;height: 50px;background-color: aquamarine;font-size: 16px" @click="show=true">现场照片</button>
       </div>
 
       <divider style="display: flex;margin-bottom: 10px">转单详情</divider>
@@ -80,15 +80,48 @@
         </div>
       </div>
     </div>
+    <div v-transfer-dom>
+      <x-dialog v-model="show" class="dialog-demo">
+        <div class="img-box">
+          <div style="width: 100%;height: 100%" v-for="info in complainDetail.customerComplainWxModel.imagePathLists">
+            <img src="info" style="max-width:100%;height: 100%">
+          </div>
+        </div>
+        <div @click="show=false">
+          <span class="vux-close"></span>
+        </div>
+      </x-dialog>
+    </div>
 
+    <div v-transfer-dom>
+      <x-dialog v-model="shopViewShow" class="dialog-demo">
+        <div style="background-color: #FBF9FE">
+          <div style="display: flex;flex-direction: row;position: relative;align-items: center;margin-bottom: 10px;background-color: white" v-for="info in content">
+
+            <cell :title="info.shopId" :value="info.shopName" style="width: 70%;height: 60px">
+              <img slot="icon" width="20" style="display:block;margin-right:5px;" src="../assets/logo.png">
+            </cell>
+
+            <button style="width: 30%;height: 50px;font-size: 16px;margin-left: 0px;background-color: cornflowerblue" @click="chooseShop(info.shopName, info.shopId)">选择</button>
+
+          </div>
+        </div>
+        <div @click="shopViewShow=false">
+          <span class="vux-close"></span>
+        </div>
+      </x-dialog>
+    </div>
   </div>
 </template>
 
 <script>
-  import {Group, Cell, Scroller, Divider, XTextarea, XInput, XButton, XHeader} from 'vux'
+  import {Group, Cell, Scroller, Divider, XTextarea, XInput, XButton, XHeader, XDialog, TransferDom} from 'vux'
   import {mapGetters} from 'vuex'
 
   export default {
+    directives: {
+      TransferDom
+    },
     components: {
       Group,
       Cell,
@@ -97,7 +130,8 @@
       XTextarea,
       XInput,
       XButton,
-      XHeader
+      XHeader,
+      XDialog
     },
     beforeCreate () {
       this.shopName = this.$store.state.shopName
@@ -107,11 +141,14 @@
         turn: '',
         result: '1',
         shopName: this.$store.state.shopName,
-        shopId: null
+        shopId: null,
+        show: false,
+        shopViewShow: false
       }
     },
     computed: mapGetters({
-      complainDetail: 'complainDetail'
+      complainDetail: 'complainDetail',
+      content: 'content'
     }),
     created () {
       this.$store.dispatch('getComplainDetail', this.$route.params.id)
@@ -141,9 +178,8 @@
         return isShow
       },
       toShopList: function () {
-        console.log(this.shopId, this.shopName)
-        this.$destroy()
-        this.$router.push({name: 'ShopList', params: {shopName: this.shopName, id: this.$route.params.id}})
+        this.shopViewShow = true
+        this.$store.dispatch('getShopList', this.shopName)
       },
       submitResult: function () {
         var data = {}
@@ -158,6 +194,11 @@
         console.log('1')
         this.$destroy()
         this.$router.push('/' + this.$detailList.state.workId)
+      },
+      chooseShop: function (shopName, shopId) {
+        this.shopViewShow = false
+        this.shopName = shopName
+        this.shopId = shopId
       }
     },
     destroyed () {
@@ -166,7 +207,8 @@
   }
 </script>
 
-<style>
+<style lang="less" scoped>
+  @import '~vux/src/styles/close';
   .box {
     display: flex;
     /*height: 150px;*/
@@ -175,5 +217,24 @@
     width: 100%;
     margin-bottom: 20px;
     background-color: white;
+  }
+
+  .dialog-demo {
+  .weui-dialog{
+    border-radius: 8px;
+    padding-bottom: 8px;
+  }
+  .dialog-title {
+    line-height: 30px;
+    color: #666;
+  }
+  .img-box {
+    height: 350px;
+    overflow-y: auto;
+  }
+  .vux-close {
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
   }
 </style>

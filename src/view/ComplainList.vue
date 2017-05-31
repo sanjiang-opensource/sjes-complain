@@ -53,7 +53,6 @@
       this.workerId = this.$route.params.workerId
       this.page = 1
       this.size = 10
-      this.detailList.state.workId = this.$route.params.workerId
     },
     computed: {
     },
