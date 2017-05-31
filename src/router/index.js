@@ -1,15 +1,22 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Hello from '@/components/Hello'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
+  mode: 'history',
   routes: [
     {
-      path: '/',
-      name: 'Hello',
-      component: Hello
+      path: '/complain/detail/:id',
+      name: 'Detail',
+      component: require('../view/ComplainDetail.vue')
+    },
+    {
+      path: '/:workerId',
+      name: 'DetailList',
+      component: require('../view/ComplainList.vue')
     }
   ]
 })
+
+export default router
