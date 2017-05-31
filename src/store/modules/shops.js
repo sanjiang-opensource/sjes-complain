@@ -4,7 +4,8 @@ import * as type from '../mutation-types'
 const state = {
   page: 1,
   size: 10,
-  content: []
+  content: [],
+  shopName: ''
 }
 
 const getters = {
@@ -20,6 +21,9 @@ const mutations = {
     state.content = []
     state.page = 1
     state.size = 10
+  },
+  'editShopName' (state, data) {
+    state.shopName = data
   }
 }
 

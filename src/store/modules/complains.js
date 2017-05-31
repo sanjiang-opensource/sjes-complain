@@ -7,7 +7,8 @@ const state = {
   totalCount: null,
   current: null,
   list: [],
-  busy: false
+  busy: false,
+  workId: ''
 }
 
 const getters = {

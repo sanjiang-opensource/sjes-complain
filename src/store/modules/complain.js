@@ -5,7 +5,8 @@ const state = {
   complainDetail: {
     customerComplainWxModel: {},
     complainResults: []
-  }
+  },
+  shopName: null
 }
 
 const getters = {
@@ -17,7 +18,8 @@ const mutations = {
     state.complainDetail = data
   },
   [types.CLEAN_DETAIL] (state) {
-    state.complainDetail = {}
+    state.customerComplainWxModel = {}
+    state.complainResults = []
   }
 }
 

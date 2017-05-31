@@ -1,7 +1,7 @@
 <template>
   <div>
     <!--<divider style="display: flex;margin-bottom: 10px">投诉详情</divider>-->
-    <x-header style="position: fixed;z-index: 9999;width: 100%;height: 50px;top:0px">投诉详情</x-header>
+    <x-header :left-options="{preventGoBack: true}" style="position: fixed;z-index: 9999;width: 100%;height: 50px;top:0px" @on-click-back="goBack">投诉详情</x-header>
     <div style="display: flex;margin-top: 50px;flex-direction: column">
       <div label-width="4.5em" label-margin-right="2em" label-align="right"
            style="background-color: white;display: flex;margin-bottom: 20px;flex-direction: column">
@@ -61,8 +61,7 @@
           <div style="display: flex;flex-direction: row;height: 100px;align-items: center;position: relative">
             <input v-model="turn" type="checkbox" style="height: 20px;width: 20px;margin-left: 20px">是否转单</input>
             <x-input v-model="shopName" style="margin-left: 10px;width: 100px;height: 25px;background-color: #eeeeee"></x-input>
-            <button
-              style="margin-left: 20px;width: 100px;height: 40px;background-color: cornflowerblue;font-size: 16px;color: white" @click="toShopList">
+            <button style="margin-left: 20px;width: 100px;height: 40px;background-color: cornflowerblue;font-size: 16px;color: white" @click="toShopList">
               选择商场
             </button>
           </div>
@@ -100,20 +99,25 @@
       XButton,
       XHeader
     },
+    beforeCreate () {
+      this.shopName = this.$store.state.shopName
+    },
     data () {
       return {
         turn: '',
-        result: '',
-        shopName: '',
-        shopId: '00001'
+        result: '1',
+        shopName: this.$store.state.shopName,
+        shopId: null
       }
     },
     computed: mapGetters({
       complainDetail: 'complainDetail'
     }),
     created () {
-//      this.$store.dispatch('CLEAN_DETAIL')
       this.$store.dispatch('getComplainDetail', this.$route.params.id)
+    },
+    mounted () {
+
     },
     methods: {
       getStatusName: function (value) {
@@ -137,7 +141,9 @@
         return isShow
       },
       toShopList: function () {
-        this.$router.push('/shopList')
+        console.log(this.shopId, this.shopName)
+        this.$destroy()
+        this.$router.push({name: 'ShopList', params: {shopName: this.shopName, id: this.$route.params.id}})
       },
       submitResult: function () {
         var data = {}
@@ -147,7 +153,15 @@
         data.shopId = this.shopId
         data.turn = this.turn
         this.$store.dispatch('submitResult', data)
+      },
+      goBack: function () {
+        console.log('1')
+        this.$destroy()
+        this.$router.push('/' + this.$detailList.state.workId)
       }
+    },
+    destroyed () {
+      this.$store.dispatch('CLEAN_DETAIL')
     }
   }
 </script>

@@ -1,6 +1,6 @@
 import axios from '../utils/diyaxios'
 
-const HOST = process.env.NODE_ENV === 'production' ? 'http://193.0.1.229:9045/admin/customerComplain' : 'http://193.0.1.229:9045/admin/customerComplain'
+const HOST = process.env.NODE_ENV === 'production' ? 'http://weixin-dev.sanjiang.com/customerComplain' : 'http://weixin-dev.sanjiang.com/admin/customerComplain'
 
 export function fetch (url) {
   return new Promise((resolve, reject) => {
