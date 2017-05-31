@@ -16,8 +16,8 @@ const mutations = {
 }
 
 const actions = {
-  submitResult ({commit}, shopName, shopId, id, result, turn) {
-    api.resultSubmit(shopName, shopId, id, result, turn)
+  submitResult ({commit}, res) {
+    api.resultSubmit(res)
       .then(data => {
         console.log(data)
         commit(types.SUBMIT_COMPLAIN, data)

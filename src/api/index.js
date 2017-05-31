@@ -1,16 +1,6 @@
 import axios from '../utils/diyaxios'
 
-const HOST = process.env.NODE_ENV === 'production' ? 'http://weixin-dev.sanjiang.com/admin/customerComplain' : 'http://weixin-dev.sanjiang.com/admin/customerComplain'
-
-class ResultData {
-  constructor (shopName, shopId, id, turn, result) {
-    this.shopId = shopId
-    this.shopName = shopName
-    this.id = id
-    this.turn = turn
-    this.result = result
-  }
-}
+const HOST = process.env.NODE_ENV === 'production' ? 'http://193.0.1.229:9045/admin/customerComplain' : 'http://193.0.1.229:9045/admin/customerComplain'
 
 export function fetch (url) {
   return new Promise((resolve, reject) => {
@@ -21,17 +11,14 @@ export function fetch (url) {
   })
 }
 
-export function submit (url, result, id, shopId, shopName, turn) {
+export function submit (url) {
   return new Promise((resolve, reject) => {
-    axios.post(HOST + url, {
-      result: result,
-      id: id,
-      shopName: shopName,
-      shopId: shopId,
-      turn: turn
-    })
+    axios.post(HOST + url)
       .then(response => {
         resolve(response.data)
+      })
+      .catch(function (error) {
+        console.log(error)
       })
   })
 }
@@ -52,15 +39,13 @@ export function fetchSearchByShopName (shopName, page = 1, limit = 20) {
 }
 
 // 提交处理结果
-export function resultSubmit (shopName, id, result, shopId, turn) {
-  return submit(`/result/submit/1`, shopName, id, result, shopId, turn)
+export function resultSubmit (res) {
+  console.log(res.shopName, res.id, res.result, res.shopId, res.turn)
+  return submit(`/result/submit/1?result=${res.result}&complainId=${res.id}&shopName=${res.shopName}&shopId=${res.shopId}&turn=${res.turn}`)
 }
 
 // 关闭无效客诉
-export function closeComplain (id, result) {
-  var res = new ResultData()
-  res.result = result
-  res.id = id
-  return submit(`/result/submit/2`, res)
-}
+// export function closeComplain (id, result) {
+//   return submit(`/result/submit/2`, res)
+// }
 

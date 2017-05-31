@@ -14,10 +14,10 @@ const getters = {
 
 const mutations = {
   [type.SHOP_LIST] (state, data) {
-    state.list = data.list
+    state.content = data.content
   },
   [type.CLEAN_SHOP_LIST] (state) {
-    state.list = []
+    state.content = []
     state.page = 1
     state.size = 10
   }

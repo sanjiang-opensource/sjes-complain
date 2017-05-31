@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="display: flex;flex-direction: row;position: relative;align-items: center;margin-bottom: 10px;background-color: white" v-for="info in list">
+    <div style="display: flex;flex-direction: row;position: relative;align-items: center;margin-bottom: 10px;background-color: white" v-for="info in content">
 
       <cell :title="info.shopId" :value="info.shopName" style="width: 70%">
         <img slot="icon" width="20" style="display:block;margin-right:5px;" src="../assets/logo.png">
@@ -22,13 +22,8 @@ export default {
     Cell,
     XButton
   },
-  data () {
-    return {
-      list: []
-    }
-  },
   computed: mapGetters({
-    list: 'content'
+    content: 'content'
   }),
   created () {
     this.$store.dispatch('getShopList', '曙光')

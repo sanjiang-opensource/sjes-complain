@@ -105,8 +105,7 @@
         turn: '',
         result: '',
         shopName: '',
-        shopId: '',
-        id: ''
+        shopId: '00001'
       }
     },
     computed: mapGetters({
@@ -141,7 +140,13 @@
         this.$router.push('/shopList')
       },
       submitResult: function () {
-        this.$store.dispatch('submitResult', this.shopName, this.shopId, this.id, this.result, this.turn)
+        var data = {}
+        data.result = this.result
+        data.id = this.$route.params.id
+        data.shopName = this.shopName
+        data.shopId = this.shopId
+        data.turn = this.turn
+        this.$store.dispatch('submitResult', data)
       }
     }
   }
