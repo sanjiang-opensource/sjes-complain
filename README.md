@@ -1,8 +1,9 @@
 # sjes-complain
 
 ### 技术栈
-- 传说中的VUE全家桶(vue vue-router vuex)
+- VUE全家桶(vue vue-router vuex)
 - axios
+- vux
 
 ## 安装运行（Build Setup）
 
