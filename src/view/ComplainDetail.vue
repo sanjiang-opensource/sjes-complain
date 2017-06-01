@@ -1,10 +1,9 @@
 <template>
   <div>
-    <!--<divider style="display: flex;margin-bottom: 10px">投诉详情</divider>-->
-    <x-header :left-options="{preventGoBack: true}" style="position: fixed;z-index: 9999;width: 100%;height: 50px;top:0px" @on-click-back="goBack">投诉详情</x-header>
-    <div style="display: flex;margin-top: 50px;flex-direction: column">
+    <x-header :left-options="{preventGoBack: true}" style="position: fixed;width: 100%;height: 50px;top:0px;z-index: 10" @on-click-back="goBack">投诉详情</x-header>
+    <div style="display: flex;flex-direction: column;z-index: 10;background-color: #eeeeee;margin-top: 50px">
       <div label-width="4.5em" label-margin-right="2em" label-align="right"
-           style="background-color: white;display: flex;margin-bottom: 20px;flex-direction: column">
+           style="background-color: white;display: flex;margin-bottom: 10px;flex-direction: column">
         <cell title="投诉时间 ：" :value="complainDetail.customerComplainWxModel.complainTimeStr" value-align="left">
           <img slot="icon" width="25" style="display:block;margin-right:5px;" src="../assets/date.png">
         </cell>
@@ -29,18 +28,18 @@
         </cell>
       </div>
 
-      <divider style="display: flex;margin-bottom: 10px">投诉内容</divider>
-      <div style="background-color: white;display: flex;margin-bottom: 20px;flex-direction: column">
-        <cell :title="complainDetail.customerComplainWxModel.complainContent" style="word-break: break-all" ></cell>
+      <divider style="display: flex">投诉内容</divider>
+      <div style="background-color: #eeeeee;display: flex;margin-bottom: 10px;flex-direction: column">
+        <cell :title="complainDetail.customerComplainWxModel.complainContent" style="word-break: break-all;background-color: white" ></cell>
         <div v-show="showSwiper(complainDetail.customerComplainWxModel.imagePathLists)">
           <divider>投诉照片</divider>
-          <swiper height="250px" :list="complainDetail.customerComplainWxModel.imagePathLists" loop="true" dots-class="custom-bottom" dots-position="center"></swiper>
+          <swiper height="250px" :list="complainDetail.customerComplainWxModel.imagePathLists" :loop="true" dots-class="custom-bottom" dots-position="center"></swiper>
         </div>
       </div>
 
       <div v-show="isShowDetilList(complainDetail.complainResults)">
-        <divider style="display: flex;margin-bottom: 10px">转单详情</divider>
-        <div style="height: 290px;background-color: #FBF9FE;overflow-y: auto;">
+        <divider style="display: flex">转单详情</divider>
+        <div style="background-color: #FBF9FE">
           <div class="box" v-for="info in complainDetail.complainResults">
 
             <cell title="投诉受理时间 ：" :value="info.acceptTimeStr" value-align="left" label-margin-left="2em"></cell>
@@ -54,19 +53,19 @@
       </div>
 
       <div v-show="isClose(complainDetail.customerComplainWxModel.complainStat)">
-        <divider style="display: flex;margin-bottom: 10px">客诉处理</divider>
-        <div class="box">
+        <divider style="display: flex">客诉处理</divider>
+        <div class="box" style="margin-bottom: 0px">
           <cell title="投诉受理时间 ：" :value="complainDetail.customerComplainWxModel.acceptTimeStr" value-align="left" label-margin-left="2em"></cell>
           <cell title="处理门店/部门 ：" :value="complainDetail.customerComplainWxModel.receiveDept" value-align="left" label-margin-left="2em"></cell>
           <x-textarea v-model="result" title="处理结果：" :max="200" style="border-style:double;border-width: 1px;border-color: #e1eeee"></x-textarea>
           <div style="display: flex;flex-direction: row;height: 100px;align-items: center;position: relative">
-            <input v-model="turn" type="checkbox" style="height: 20px;width: 20px;margin-left: 20px">是否转单</input>
-            <x-input v-model="shopName" style="margin-left: 10px;width: 100px;height: 25px;background-color: #eeeeee"></x-input>
-            <x-button style="margin-left: 20px;width: 100px;height: 40px;font-size: 16px;color: white" @click.native="showSearchView" type="primary">选择商场</x-button>
+            <input v-model="turn" type="checkbox" style="height: 20px;width: 20px;margin-left: 10px">转单</input>
+            <x-input v-model="shopName" style="width: 25%;margin-left: 10px;height: 25px;background-color: #eeeeee" :disabled="true"></x-input>
+            <x-button style="margin-left: 10px;margin-right: 10px;width: 30%;height: 40px;font-size: 14px;color: white" @click.native="showSearchView" type="primary">选择商场</x-button>
           </div>
           <div style="display: flex;flex-direction: row;height: 80px;position: relative;background-color: #FBF9FE;padding: 10px">
-            <x-button style="margin-top: 15px;width: 40%;height: 50px;font-size: 18px;color: white" @click.native="submitResult" type="primary">提交处理结果</x-button>
-            <x-button style="margin-top: 15px;width: 40%;height: 50px;font-size: 18px;color: white" type="warn" @click.native="closeComplain">确认无效客诉</x-button>
+            <x-button style="margin-top: 15px;width: 40%;height: 50px;font-size: 15px;color: white" @click.native="submitResult" type="primary">提交处理结果</x-button>
+            <x-button style="margin-top: 15px;width: 40%;height: 50px;font-size: 15px;color: white" type="warn" @click.native="closeComplain">确认无效客诉</x-button>
           </div>
 
         </div>
@@ -199,7 +198,10 @@
       },
       showSwiper: function (value) {
         let isShow = true
-        if (value[0].img === '') {
+
+//        var ss = new Array(0)
+//        console.log(imgs.length)
+        if (value.length === 0) {
           isShow = false
         }
         return isShow
@@ -219,7 +221,7 @@
     flex-direction: column;
     position: relative;
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     background-color: white;
   }
 

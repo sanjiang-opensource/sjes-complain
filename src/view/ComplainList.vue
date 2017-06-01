@@ -71,8 +71,10 @@
         let page = this.list.length / this.size + 1
         this.busy = true
         this.isScroll = true
+        this.loading = true
         api.fetchSearchByWorkId(this.workerId, page, this.size)
           .then(res => {
+            this.show = true
             this.list = this.list.concat(res.list)
             let totalCount = res.totalCount
             if (this.list.length < totalCount) {
@@ -81,7 +83,6 @@
             this.loading = false
             this.isScroll = false
             if (res.list.length < 10) {
-              this.show = true
               this.loadingText = '已加载全部数据'
             }
           })
