@@ -8,7 +8,7 @@
         <cell title="投诉内容 ：" :inline-desc="info.complainContent"
               style="word-break: break-all "></cell>
         <div style="width: 100%;height: 1px;background-color: #e1e1e1"></div>
-        <cell :title="getOverTimeName(info.overTime)" :value="getStatusName(info.complainStat)" style="height: 60px;color: red;" :link="'/detail/'+info.id">
+        <cell :title="getOverTimeName(info.overTime)" :value="getStatusName(info.complainStat)" style="height: 60px;color: red;" :link="'/complain/detail/'+info.id">
           <img slot="icon" width="25" style="display:block;margin-right:5px;" src="../assets/logo.png">
         </cell>
       </div>
@@ -21,7 +21,6 @@
 </template>
 
 <script>
-//  import InfiniteLoading from 'vue-infinite-loading'
   import Spinner from '../components/Spinner.vue'
   import InfiniteScroll from 'vue-infinite-scroll'
   import {ViewBox, Cell, XHeader} from 'vux'
@@ -50,11 +49,10 @@
       }
     },
     mounted () {
-      this.workerId = this.$route.params.workerId
-      this.page = 1
-      this.size = 10
-    },
-    computed: {
+      this.workerId = this.$route.query.workerId
+      this.$store.commit('INIT_WORKERID', this.workerId)
+      this.page = this.$store.getters.page
+      this.size = this.$store.getters.size
     },
     methods: {
       getStatusName: function (value) {

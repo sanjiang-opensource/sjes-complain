@@ -19,7 +19,6 @@ const actions = {
   submitResult ({commit}, res) {
     api.resultSubmit(res)
       .then(data => {
-        console.log(data)
         commit(types.SUBMIT_COMPLAIN, data)
       })
   }

@@ -2,8 +2,8 @@
 export const GET_COMPLAIN_ID = 'GET_COMPLAIN_ID'
 // 获取分页列表
 export const COMPLAIN_PAGE_LIST = 'COMPLAIN_PAGE_LIST'
-// 获取当前页码
-export const GET_CURRENT_PAGE = 'CURRENT_PAGE'
+// 初始化当前工号
+export const INIT_WORKERID = 'INIT_WORKERID'
 // 获取总页数
 export const GET_TOTAL_COUNT = 'GET_TOTAL_PAGE'
 // 清空列表

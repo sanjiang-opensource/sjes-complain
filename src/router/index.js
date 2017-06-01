@@ -4,9 +4,10 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 const router = new Router({
+  mode: 'history',
   routes: [
     {
-      path: '/detail/:id',
+      path: '/complain/detail/:id',
       name: 'Detail',
       component: require('../view/ComplainDetail.vue')
     },

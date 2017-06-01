@@ -157,7 +157,8 @@
     },
     computed: mapGetters({
       complainDetail: 'complainDetail',
-      content: 'content'
+      content: 'content',
+      workerId: 'workerId'
     }),
     created () {
       this.$store.dispatch('getComplainDetail', this.$route.params.id)
@@ -178,13 +179,7 @@
         return status
       },
       isClose: function (value) {
-        let isShow = true
-        if (value === 1) {
-          isShow = true
-        } else {
-          isShow = false
-        }
-        return isShow
+        return value === 1
       },
       isShowDetilList: function (value) {
         let isShow = true
@@ -206,9 +201,9 @@
         this.$store.dispatch('submitResult', data)
       },
       goBack: function () {
-        console.log('1')
+        console.log(this.workerId)
+        this.$router.push('/complain/?workerId=' + this.workerId)
         this.$destroy()
-        this.$router.push('/' + this.$detailList.state.workId)
       },
       chooseShop: function (shopName, shopId) {
         this.shopViewShow = false

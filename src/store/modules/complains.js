@@ -8,7 +8,7 @@ const state = {
   current: null,
   list: [],
   busy: false,
-  workId: ''
+  workerId: null
 }
 
 const getters = {
@@ -16,7 +16,9 @@ const getters = {
   current: state => state.current,
   size: state => state.size,
   totalCount: state => state.totalCount,
-  busy: state => state.busy
+  busy: state => state.busy,
+  workerId: state => state.workerId,
+  page: state => state.page
 }
 
 const mutations = {
@@ -32,6 +34,9 @@ const mutations = {
   },
   [type.SET_INFINITE_BUSY] (state, data) {
     state.busy = data
+  },
+  [type.INIT_WORKERID] (state, data) {
+    state.workerId = data
   }
 }
 

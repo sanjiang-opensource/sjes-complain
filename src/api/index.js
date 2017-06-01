@@ -7,6 +7,9 @@ export function fetch (url) {
     axios.get(HOST + url)
       .then(response => {
         resolve(response.data)
+      }).catch(error => {
+        console.log(error)
+        reject(error)
       })
   })
 }
@@ -17,7 +20,7 @@ export function submit (url) {
       .then(response => {
         resolve(response.data)
       })
-      .catch(function (error) {
+      .catch(error => {
         console.log(error)
       })
   })
