@@ -1,0 +1,15 @@
+language: node_js
+node_js:
+  - '4'
+cache:
+  bunder: true
+  directories:
+    - node_modules
+before_script:
+  - npm install
+script:
+  - npm run dev
+  - npm run build
+deploy:
+  provider: npm
+  email: fudongwei@sanjiang365.com
