@@ -21,6 +21,12 @@ const actions = {
       .then(data => {
         commit(types.SUBMIT_COMPLAIN, data)
       })
+  },
+  closeComplain ({commit}, res) {
+    api.closeComplain(res)
+      .then(data => {
+        commit(types.SUBMIT_COMPLAIN, data)
+      })
   }
 }
 

@@ -31,8 +31,11 @@
 
       <divider style="display: flex;margin-bottom: 10px">投诉内容</divider>
       <div style="background-color: white;display: flex;margin-bottom: 20px;flex-direction: column">
-        <cell :inline-desc="complainDetail.customerComplainWxModel.complainContent" style="word-break: break-all"></cell>
-        <swiper height="250px" :list="list" loop="true" dots-class="custom-bottom" dots-position="center"></swiper>
+        <cell :title="complainDetail.customerComplainWxModel.complainContent" style="word-break: break-all" ></cell>
+        <div v-show="showSwiper(complainDetail.customerComplainWxModel.imagePathLists)">
+          <divider>投诉照片</divider>
+          <swiper height="250px" :list="complainDetail.customerComplainWxModel.imagePathLists" loop="true" dots-class="custom-bottom" dots-position="center"></swiper>
+        </div>
       </div>
 
       <div v-show="isShowDetilList(complainDetail.complainResults)">
@@ -63,23 +66,11 @@
           </div>
           <div style="display: flex;flex-direction: row;height: 80px;position: relative;background-color: #FBF9FE;padding: 10px">
             <x-button style="margin-top: 15px;width: 40%;height: 50px;font-size: 18px;color: white" @click.native="submitResult" type="primary">提交处理结果</x-button>
-            <x-button style="margin-top: 15px;width: 40%;height: 50px;font-size: 18px;color: white" type="warn">确认无效客诉</x-button>
+            <x-button style="margin-top: 15px;width: 40%;height: 50px;font-size: 18px;color: white" type="warn" @click.native="closeComplain">确认无效客诉</x-button>
           </div>
 
         </div>
       </div>
-    </div>
-    <div v-transfer-dom>
-      <x-dialog v-model="show" class="dialog-demo">
-        <div class="img-box">
-          <div style="width: 100%;height: 100%" v-for="info in complainDetail.customerComplainWxModel.imagePathLists">
-            <img src="info" style="max-width:100%;height: 100%">
-          </div>
-        </div>
-        <div @click="show=false">
-          <span class="vux-close"></span>
-        </div>
-      </x-dialog>
     </div>
 
     <div v-transfer-dom>
@@ -142,17 +133,7 @@
         shopId: null,
         show: false,
         shopViewShow: false,
-        showAlert: false,
-        list: [{
-          img: 'http://img.sanjiang.com/images/4530199/00.jpg'
-        }, {
-          img: 'http://img.sanjiang.com/images/1013411/00.jpg'
-        }, {
-          img: 'http://img.sanjiang.com/images/1021776/00.jpg'
-        }, {
-          img: 'http://img.sanjiang.com/images/1017440/00.jpg'
-        }
-        ]
+        showAlert: false
       }
     },
     computed: mapGetters({
@@ -188,6 +169,16 @@
         data.shopId = this.shopId
         data.turn = this.turn
         this.$store.dispatch('submitResult', data)
+        this.$router.push('/complain/?workerId=' + this.workerId)
+        this.$destroy()
+      },
+      closeComplain: function () {
+        var res = {}
+        res.result = this.result
+        res.id = this.$route.params.id
+        this.$store.dispatch('closeComplain', res)
+        this.$router.push('/complain/?workerId=' + this.workerId)
+        this.$destroy()
       },
       goBack: function () {
         console.log(this.workerId)
@@ -205,6 +196,13 @@
         } else {
           this.showAlert = true
         }
+      },
+      showSwiper: function (value) {
+        let isShow = true
+        if (value[0].img === '') {
+          isShow = false
+        }
+        return isShow
       }
     },
     destroyed () {

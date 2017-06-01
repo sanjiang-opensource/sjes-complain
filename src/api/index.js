@@ -48,7 +48,7 @@ export function resultSubmit (res) {
 }
 
 // 关闭无效客诉
-// export function closeComplain (id, result) {
-//   return submit(`/result/submit/2`, res)
-// }
+export function closeComplain (res) {
+  return submit(`/result/submit/2?result=${res.result}&complainId=${res.id}`)
+}
 
