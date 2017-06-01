@@ -8,7 +8,7 @@
         <cell title="投诉时间 ：" :value="complainDetail.customerComplainWxModel.complainTimeStr" value-align="left">
           <img slot="icon" width="25" style="display:block;margin-right:5px;" src="../assets/date.png">
         </cell>
-        <cell title="处理状态 ：" :value="getStatusName(complainDetail.customerComplainWxModel.complainStat)"
+        <cell title="处理状态 ：" :value="complainDetail.customerComplainWxModel.complainStat | statusName"
               value-align="left">
           <img slot="icon" width="25" style="display:block;margin-right:5px;" src="../assets/state.png">
         </cell>
@@ -167,17 +167,6 @@
 
     },
     methods: {
-      getStatusName: function (value) {
-        let status = ''
-        if (value === 1) {
-          status = '待处理'
-        } else if (value === 2) {
-          status = '已完成'
-        } else {
-          status = '已关闭'
-        }
-        return status
-      },
       isClose: function (value) {
         return value === 1
       },

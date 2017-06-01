@@ -16,6 +16,24 @@ FastClick.attach(document.body)
 
 Vue.config.productionTip = false
 
+Vue.filter('statusName', function (value) {
+  let status = ''
+  if (value === 1) {
+    status = '待处理'
+  } else if (value === 2) {
+    status = '已完成'
+  } else {
+    status = '已关闭'
+  }
+  return status
+})
+Vue.filter('timeToString', function (value) {
+  if (value !== '') {
+    return value[0] + '-' + value[1] + '-' + value[2] + ' ' + value[3] + ':' + value[4] + ':' + (value[5] === undefined ? '00' : value[5])
+  }
+  return ''
+})
+
 /* eslint-disable no-new */
 new Vue({
   router,
