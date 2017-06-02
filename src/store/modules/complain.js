@@ -4,9 +4,9 @@ import * as api from '../../api'
 const state = {
   complainDetail: {
     customerComplainWxModel: {},
-    complainResults: []
-  },
-  shopName: null
+    complainResults: [],
+    shopIds: []
+  }
 }
 
 const getters = {
@@ -20,14 +20,14 @@ const mutations = {
   [types.CLEAN_DETAIL] (state) {
     state.customerComplainWxModel = {}
     state.complainResults = []
+    state.shopIds = []
   }
 }
 
 const actions = {
-  getComplainDetail ({commit}, id) {
-    api.fetchItemById(id)
+  getComplainDetail ({commit}, res) {
+    api.fetchItemById(res)
       .then(data => {
-        console.log(data)
         commit(types.GET_COMPLAIN_ID, data)
       })
   },

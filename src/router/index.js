@@ -7,7 +7,7 @@ const router = new Router({
   mode: 'history',
   routes: [
     {
-      path: '/complain/detail/:id',
+      path: '/complain/detail/:id/:workerId',
       name: 'Detail',
       component: require('../view/ComplainDetail.vue')
     },

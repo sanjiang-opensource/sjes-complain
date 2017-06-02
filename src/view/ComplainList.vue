@@ -7,7 +7,7 @@
         <cell title="受理部门 ：" :value="info.receiveDept" value-align="left" label-margin-left="2em"></cell>
         <cell title="投诉内容 ：" :inline-desc="info.complainContent" style="word-break: break-all "></cell>
         <!--<div style="width: 100%;height: 1px;background-color: #e1e1e1"></div>-->
-        <cell :border-intent="false" :title="getOverTimeName(info.overTime)" :value="info.complainStat | statusName" style="height: 60px;color: red;" :link="'/complain/detail/'+info.id">
+        <cell :border-intent="false" :title="getOverTimeName(info.overTime)" :value="info.complainStat | statusName" style="height: 60px;color: red;" :link="'/complain/detail/'+info.id+'/'+workerId">
           <img slot="icon" width="25" style="display:block;margin-right:5px;" src="../assets/outtime.png">
         </cell>
       </div>
@@ -51,9 +51,12 @@
         loadingText: '数据加载完成'
       }
     },
-    mounted () {
+    created () {
       this.workerId = this.$route.query.workerId
       this.$store.commit('INIT_WORKERID', this.workerId)
+      this.$store.dispatch('getComplainList', this.workerId)
+    },
+    mounted () {
       this.page = this.$store.getters.page
       this.size = this.$store.getters.size
     },

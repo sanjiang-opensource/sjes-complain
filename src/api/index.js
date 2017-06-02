@@ -32,8 +32,8 @@ export function fetchSearchByWorkId (jobNum, page = 1, limit = 10) {
 }
 
 // 根据id获取客诉详情
-export function fetchItemById (id) {
-  return fetch(`/result/wx/${id}`)
+export function fetchItemById (res) {
+  return fetch(`/result/wx/${res.id}/${res.workerId}`)
 }
 
 // 根据shopName获取门店列表

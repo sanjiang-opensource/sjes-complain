@@ -7,6 +7,9 @@ import axios from './utils/diyaxios'
 import {sync} from 'vuex-router-sync'
 import store from './store'
 import router from './router'
+import {ConfirmPlugin} from 'vux'
+
+Vue.use(ConfirmPlugin)
 
 sync(store, router)
 
@@ -26,6 +29,17 @@ Vue.filter('statusName', function (value) {
     status = '已关闭'
   }
   return status
+})
+Vue.filter('statusColor', function (value) {
+  let color = 'gray'
+  if (value === 1) {
+    color = 'red'
+  } else if (value === 2) {
+    color = 'green'
+  } else {
+    color = 'gray'
+  }
+  return color
 })
 Vue.filter('timeToString', function (value) {
   if (value !== '') {
