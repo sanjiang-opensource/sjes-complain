@@ -16,7 +16,14 @@ const router = new Router({
       name: 'DetailList',
       component: require('../view/ComplainList.vue')
     }
-  ]
+  ],
+  scrollBehavior (to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { x: 0, y: 0 }
+    }
+  }
 })
 
 // router.beforeEach(function (to, from, next) {
