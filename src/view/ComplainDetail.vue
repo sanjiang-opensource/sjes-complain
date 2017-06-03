@@ -56,7 +56,7 @@
         </div>
       </div>
 
-      <div v-show="isClose()">
+      <div v-show="true">
         <divider style="display: flex">客诉处理</divider>
         <div class="box" style="margin-bottom: 0px">
           <cell title="投诉受理时间 ：" :value="complainDetail.customerComplainWxModel.acceptTimeStr" value-align="left"
@@ -124,6 +124,13 @@
         <p style="text-align:center;">{{ detail }}</p>
       </confirm>
     </div>
+
+    <div v-transfer-dom>
+      <confirm v-model="warn"
+               title="操作提示">
+        <p style="text-align:center;">{{ warnInfo }}</p>
+      </confirm>
+    </div>
   </div>
 </template>
 
@@ -175,7 +182,9 @@
         show: false,
         shopViewShow: false,
         showAlert: false,
-        detail: ''
+        detail: '',
+        warn: false,
+        warnInfo: ''
       }
     },
     computed: mapGetters({
@@ -210,7 +219,7 @@
         this.$store.dispatch('getShopList', this.shopName)
       },
       submitResult: function () {
-        this.detail = '确认转单？'
+        this.detail = '确认提交转单？'
         this.showAlert = true
       },
       closeComplain: function () {
@@ -243,27 +252,38 @@
       },
       confirm () {
         if (this.detail === '确认关闭客诉？') {
-          this.showAlert = false
-          var res = {}
-          res.result = this.result
-          res.id = this.$route.params.id
-          this.$store.dispatch('closeComplain', res)
-          this.$router.push('/complain/?workerId=' + this.workerId)
-          this.$destroy()
+          if (this.result !== '' && this.turn === false) {
+            this.showAlert = false
+            var res = {}
+            res.result = this.result
+            res.id = this.$route.params.id
+            this.$store.dispatch('closeComplain', res)
+            this.$router.push('/complain/?workerId=' + this.workerId)
+            this.$destroy()
+          } else {
+            console.log('1')
+            this.warn = true
+            this.warnInfo = '处理意见不能为空且不能勾选转单'
+          }
         }
         if (this.detail === '确认提交转单？') {
-          this.showAlert = false
-          var data = {}
-          data.result = this.result
-          data.id = this.$route.params.id
-          data.shopName = this.shopName
-          data.shopId = this.shopId
-          data.turn = this.turn
-          this.$store.dispatch('submitResult', data)
-          this.$router.push('/complain/?workerId=' + this.workerId)
-          this.$destroy()
+          console.log(this.result, this.turn, 'shopid', this.shopId)
+          if (this.result === '' || this.turn === false || this.shopId === null) {
+            this.warn = true
+            this.warnInfo = '请将信息填写完整'
+          } else {
+            this.showAlert = false
+            var data = {}
+            data.result = this.result
+            data.id = this.$route.params.id
+            data.shopName = this.shopName
+            data.shopId = this.shopId
+            data.turn = this.turn
+            this.$store.dispatch('submitResult', data)
+            this.$router.push('/complain/?workerId=' + this.workerId)
+            this.$destroy()
+          }
         }
-
         if (this.detail === '请勾选转单按钮') {
           console.log('1')
           this.showAlert = false
