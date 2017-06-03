@@ -67,8 +67,7 @@
         style="border-style:double;border-width: 1px;border-color: #e1eeee"></x-textarea>
           <div style="display: flex;flex-direction: row;height: 100px;align-items: center;position: relative">
           <input v-model="turn" type="checkbox" style="height: 20px;width: 20px;margin-left: 10px">转单</input>
-          <x-input v-model="shopName" style="width: 25%;margin-left: 10px;height: 25px;background-color: #eeeeee"
-      :disabled="true"></x-input>
+          <x-input v-model="shopName" style="width: 25%;margin-left: 10px;height: 25px;background-color: #eeeeee"></x-input>
           <x-button style="margin-left: 10px;margin-right: 10px;width: 30%;height: 40px;font-size: 14px;color: white"
       @click.native="showSearchView" type="primary">选择商场
           </x-button>
@@ -88,34 +87,26 @@
           </div>
 
           <div v-transfer-dom>
-        <x-dialog v-model="shopViewShow" class="dialog-demo">
-          <div
-        style="display: flex;flex-direction: row;align-items: center;position: relative;padding: 10px;background-color: #eeeeee">
-          <x-input v-model="shopName"
-        style="margin-left: 10px;width: 55%;height: 25px;background-color: white;border-color: #9b9b9b;border-style:solid; border-width:1px;"></x-input>
-          <x-button style="margin-left: 5px;width: 100px;height: 40px;font-size: 16px;color: white"
-      @click.native="toShopList" type="primary">查询
-          </x-button>
-          </div>
+        <popup v-model="shopViewShow" position="bottom" max-height="65%">
           <div style="background-color: #eeeeee;overflow-y: auto;height: 400px;">
-          <div
-        style="display: flex;flex-direction: row;position: relative;align-items: center;margin-bottom: 10px;background-color: white"
-        v-for="info in content">
+            <div
+              style="display: flex;flex-direction: row;position: relative;align-items: center;margin-bottom: 10px;background-color: white"
+              v-for="info in content">
 
-          <cell :title="info.shopId" :value="info.shopName" style="width: 60%;height: 60px">
-          <img slot="icon" width="30" style="display:block;margin-right:5px;" src="../assets/shop.png">
-          </cell>
+              <cell :title="info.shopId" :value="info.shopName" style="width: 60%;height: 60px">
+                <img slot="icon" width="30" style="display:block;margin-right:5px;" src="../assets/shop.png">
+              </cell>
 
-          <x-button style="width: 25%;height: 40px;font-size: 16px;margin-right: 10px"
-      @click.native="chooseShop(info.shopName, info.shopId)" type="primary">选择
-          </x-button>
+              <x-button style="width: 25%;height: 40px;font-size: 16px;margin-right: 10px"
+                        @click.native="chooseShop(info.shopName, info.shopId)" type="primary">选择
+              </x-button>
 
+            </div>
           </div>
+          <div @click="shopViewShow=false" style="display: flex;justify-content: center">
+            <span class="vux-close"></span>
           </div>
-          <div @click="shopViewShow=false">
-          <span class="vux-close"></span>
-          </div>
-          </x-dialog>
+          </popup>
           </div>
           <div v-transfer-dom>
         <confirm v-model="showAlert"
@@ -148,7 +139,8 @@
           TransferDom,
           Alert,
           Swiper,
-          Confirm
+          Confirm,
+          Popup
         } from 'vux'
         import {mapGetters} from 'vuex'
         import SubmitModel from '../utils/SubmitModel'
@@ -169,7 +161,8 @@
             XDialog,
             Alert,
             Swiper,
-            Confirm
+            Confirm,
+            Popup
           },
           beforeCreate () {
             this.shopName = this.$store.state.shopName
@@ -206,9 +199,6 @@
             isShowDetilList () {
               return this.complainDetail.complainResults.length !== 0
             },
-            toShopList: function () {
-              this.$store.dispatch('getShopList', this.shopName)
-            },
             submitResult: function () {
               this.detail = '确认提交转单？'
               this.showAlert = true
@@ -229,6 +219,7 @@
             showSearchView: function () {
               if (this.turn) {
                 this.shopViewShow = true
+                this.$store.dispatch('getShopList', this.shopName)
               } else {
                 this.detail = '请勾选转单按钮'
                 this.showAlert = true
