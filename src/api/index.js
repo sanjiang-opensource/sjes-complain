@@ -8,7 +8,6 @@ export function fetch (url) {
       .then(response => {
         resolve(response.data)
       }).catch(error => {
-        console.log(error)
         reject(error)
       })
   })
@@ -21,7 +20,7 @@ export function submit (url) {
         resolve(response.data)
       })
       .catch(error => {
-        console.log(error)
+        reject(error)
       })
   })
 }

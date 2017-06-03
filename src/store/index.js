@@ -3,7 +3,6 @@ import Vuex from 'vuex'
 import complainList from './modules/complains'
 import complain from './modules/complain'
 import shopList from './modules/shops'
-import submitResult from './modules/submitResult'
 import actions from './actions'
 import createLogger from 'vuex/src/plugins/logger'
 
@@ -16,8 +15,7 @@ export default new Vuex.Store({
   modules: {
     complainList,
     complain,
-    shopList,
-    submitResult
+    shopList
   },
   strict: debug,
   plugins: debug ? [createLogger()] : []

@@ -4,8 +4,6 @@ export const GET_COMPLAIN_ID = 'GET_COMPLAIN_ID'
 export const COMPLAIN_PAGE_LIST = 'COMPLAIN_PAGE_LIST'
 // 初始化当前工号
 export const INIT_WORKERID = 'INIT_WORKERID'
-// 获取总页数
-export const GET_TOTAL_COUNT = 'GET_TOTAL_PAGE'
 // 清空列表
 export const CLEAN_LIST = 'CLEAN_LIST'
 // 清空详情

@@ -19,4 +19,13 @@ const router = new Router({
   ]
 })
 
+router.beforeEach(function (to, from, next) {
+  let workerId = to.query.workerId
+  if (workerId === undefined || workerId === null || workerId.length !== 5) {
+    window.alert('错误的工号！')
+  } else {
+    next()
+  }
+})
+
 export default router

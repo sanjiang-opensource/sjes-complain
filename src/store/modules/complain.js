@@ -18,9 +18,10 @@ const mutations = {
     state.complainDetail = data
   },
   [types.CLEAN_DETAIL] (state) {
-    state.customerComplainWxModel = {}
-    state.complainResults = []
-    state.shopIds = []
+    state.complainDetail = {}
+  },
+  [types.SUBMIT_COMPLAIN] (state, data) {
+    state.result = data
   }
 }
 
@@ -33,6 +34,17 @@ const actions = {
   },
   [types.CLEAN_DETAIL] ({commit}) {
     commit(types.CLEAN_DETAIL)
+  },
+  submitResult ({commit}, res) {
+    api.resultSubmit(res).then(data => {
+      commit(types.SUBMIT_COMPLAIN, data)
+    })
+  },
+  closeComplain ({commit}, res) {
+    api.closeComplain(res)
+      .then(data => {
+        commit(types.SUBMIT_COMPLAIN, data)
+      })
   }
 }
 
