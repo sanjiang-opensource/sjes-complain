@@ -19,13 +19,14 @@ const router = new Router({
   ]
 })
 
-router.beforeEach(function (to, from, next) {
-  let workerId = to.query.workerId
-  if (workerId === undefined || workerId === null || workerId.length !== 5) {
-    window.alert('错误的工号！')
-  } else {
-    next()
-  }
-})
+// router.beforeEach(function (to, from, next) {
+//   let workerId = to.query.workerId
+//   let fullPath = to.fullPath
+//   if (fullPath.indexOf('detail') < 0 && (workerId === null || workerId === undefined || workerId.length !== 5)) {
+//     window.alert('请输入正确的工号')
+//   } else {
+//     next()
+//   }
+// })
 
 export default router
