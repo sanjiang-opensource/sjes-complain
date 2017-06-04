@@ -6,11 +6,15 @@ const state = {
     customerComplainWxModel: {},
     complainResults: [],
     shopIds: []
+  },
+  message: {
+
   }
 }
 
 const getters = {
-  complainDetail: state => state.complainDetail
+  complainDetail: state => state.complainDetail,
+  message: state => state.message
 }
 
 const mutations = {
@@ -21,7 +25,8 @@ const mutations = {
     state.complainDetail = {}
   },
   [types.SUBMIT_COMPLAIN] (state, data) {
-    state.result = data
+    // state.result = data
+    state.message = data
   }
 }
 

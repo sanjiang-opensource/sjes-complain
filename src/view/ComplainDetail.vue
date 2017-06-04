@@ -87,19 +87,18 @@
           </div>
 
           <div v-transfer-dom>
-        <popup v-model="shopViewShow" position="bottom" max-height="65%">
+        <popup v-model="shopViewShow" position="bottom">
           <div style="background-color: #eeeeee;overflow-y: auto;height: 400px;">
-            <div
-              style="display: flex;flex-direction: row;position: relative;align-items: center;margin-bottom: 10px;background-color: white"
+            <div style="display: flex;flex-direction: row;position: relative;align-items: center;margin-bottom: 10px;background-color: white"
               v-for="info in content">
 
-              <cell :title="info.shopId" :value="info.shopName" style="width: 60%;height: 60px">
+              <cell :title="info.shopId" :value="info.shopName" style="width:100%;height: 60px" @click.native="chooseShop(info.shopName, info.shopId)">
                 <img slot="icon" width="30" style="display:block;margin-right:5px;" src="../assets/shop.png">
               </cell>
 
-              <x-button style="width: 25%;height: 40px;font-size: 16px;margin-right: 10px"
-                        @click.native="chooseShop(info.shopName, info.shopId)" type="primary">选择
-              </x-button>
+              <!--<x-button style="width: 25%;height: 40px;font-size: 16px;margin-right: 10px"-->
+                        <!--@click.native="chooseShop(info.shopName, info.shopId)" type="primary">选择-->
+              <!--</x-button>-->
 
             </div>
           </div>
@@ -110,15 +109,14 @@
           </div>
           <div v-transfer-dom>
         <confirm v-model="showAlert"
-        title="操作提示"
-      @on-confirm="confirm">
+        title="操作提示" @on-confirm="confirm">
           <p style="text-align:center;">{{ detail }}</p>
         </confirm>
         </div>
 
         <div v-transfer-dom>
         <confirm v-model="warn"
-        title="操作提示">
+        title="操作提示" @on-confirm="submitRes">
           <p style="text-align:center;">{{ warnInfo }}</p>
         </confirm>
         </div>
@@ -184,7 +182,8 @@
           computed: mapGetters({
             complainDetail: 'complainDetail',
             content: 'content',
-            workerId: 'workerId'
+            workerId: 'workerId',
+            message: 'message'
           }),
           mounted () {
             this.$store.dispatch('getComplainDetail', {id: this.$route.params.id, workerId: this.$route.params.workerId})
@@ -230,21 +229,21 @@
             },
             confirm () {
               if (this.detail === '确认关闭客诉？') {
-                console.log(this.turn === '')
+//                console.log(this.turn === '')
+                this.warn = true
                 if (this.result !== '' && this.turn === '') {
                   this.showAlert = false
                   var res = {}
                   res.result = this.result
                   res.id = this.$route.params.id
                   this.$store.dispatch('closeComplain', res)
-                  this.$router.push('/complain/?workerId=' + this.workerId)
-                  this.$destroy()
+                  this.warnInfo = this.message.msg
                 } else {
-                  this.warn = true
                   this.warnInfo = '处理意见不能为空且不能勾选转单'
                 }
               }
               if (this.detail === '确认提交转单？') {
+                this.warn = true
                 if (this.result === '' || this.turn === '' || this.shopId === null) {
                   this.warn = true
                   this.warnInfo = '请将信息填写完整'
@@ -257,13 +256,17 @@
 //                  data.shopId = this.shopId
 //                  data.turn = this.turn
                   this.$store.dispatch('submitResult', data)
-                  this.$router.push('/complain/?workerId=' + this.workerId)
-                  this.$destroy()
+                  this.warnInfo = this.message.msg
                 }
               }
               if (this.detail === '请勾选转单按钮') {
                 this.showAlert = false
               }
+            },
+            submitRes () {
+              console.log('1')
+              this.$router.push('/complain/?workerId=' + this.workerId)
+              this.$destroy()
             }
           },
           destroyed () {
