@@ -264,9 +264,10 @@
               }
             },
             submitRes () {
-              console.log('1')
-              this.$router.push('/complain/?workerId=' + this.workerId)
-              this.$destroy()
+              if (this.warnInfo === this.message.msg) {
+                this.$router.push('/complain/?workerId=' + this.workerId)
+                this.$destroy()
+              }
             }
           },
           destroyed () {
