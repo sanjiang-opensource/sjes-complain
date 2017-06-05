@@ -3,13 +3,6 @@
     <x-header style="position: fixed;z-index: 9999;width: 100%;height: 50px;top:0px" :left-options="{showBack: false}">投诉列表</x-header>
     <section class="grid" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
       <item v-for="info in list" style="display: flex;flex-direction: column;margin-bottom: 20px;position: relative;width: 100%;background-color: white" :key="info.id" :item="info">
-        <!--<cell title="投诉时间 ：" :value="info.complainTime | timeToString" value-align="left" label-margin-left="2em"></cell>-->
-        <!--<cell title="受理部门 ：" :value="info.receiveDept" value-align="left" label-margin-left="2em"></cell>-->
-        <!--<cell title="投诉内容 ：" :inline-desc="info.complainContent" style="word-break: break-all "></cell>-->
-        <!--<cell :border-intent="false" :title="getOverTimeName(info.overTime)" :value="info.complainStat | statusName" style="height: 60px;color: red;" :link="'/complain/detail/'+info.id+'/'+workerId">-->
-          <!--<img slot="icon" width="25" style="display:block;margin-right:5px;" src="../assets/outtime.png">-->
-        <!--</cell>-->
-        <!--<item :item="info"></item>-->
       </item>
       <Spinner :show="loading"></Spinner>
     </section>
