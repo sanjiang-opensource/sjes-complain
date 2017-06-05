@@ -250,11 +250,16 @@
               }
               if (this.detail === '确认提交转单？') {
                 this.warn = true
-                if (this.result === '' || this.turn === '' || this.shopId === null) {
+                if (this.result === '') {
                   this.warn = true
                   this.warnInfo = '请将信息填写完整'
                 } else {
                   this.showAlert = false
+                  if (this.turn === '') {
+                    this.shopName = this.complainDetail.customerComplainWxModel.receiveDept
+                    this.shopId = this.complainDetail.customerComplainWxModel.receiveDeptNum
+                  }
+                  console.log(this.shopName, this.shopId)
                   let data = new SubmitModel(this.result, this.$route.params.id, this.shopName, this.shopId, this.turn)
                   this.$store.dispatch('submitResult', data)
                   this.warnInfo = this.message.msg
