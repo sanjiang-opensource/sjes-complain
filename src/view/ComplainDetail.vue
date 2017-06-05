@@ -261,8 +261,10 @@
                     this.turn = false
                   }
                   let data = new SubmitModel(this.result, this.$route.params.id, this.shopName, this.shopId, this.turn)
-                  this.$store.dispatch('submitResult', data)
-                  this.warnInfo = this.message.msg
+                  this.warnInfo = '提交成功'
+                  api.resultSubmit(data).then(data => {
+                    this.message.msg = data.msg
+                  })
                 }
               }
               if (this.detail === '请勾选转单按钮') {
