@@ -272,7 +272,7 @@
               }
             },
             submitRes () {
-              if (this.warnInfo === this.message.msg) {
+              if (this.message.msg.localeCompare('提交成功') === 0) {
                 this.$router.push('/complain/?workerId=' + this.workerId)
                 this.$destroy()
               }
