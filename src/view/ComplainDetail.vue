@@ -56,7 +56,7 @@
         </div>
       </div>
 
-      <div v-if="true">
+      <div v-if="isClose()">
         <divider style="display: flex">客诉处理</divider>
           <div class="box" style="margin-bottom: 0px">
           <cell title="投诉受理时间 ：" :value="complainDetail.customerComplainWxModel.acceptTimeStr" value-align="left"
@@ -215,7 +215,6 @@
             },
             showSearchView: function () {
               if (this.turn) {
-//                this.$store.dispatch('getShopList', this.shopName)
                 api.fetchSearchByShopName(this.shopName, 1, 20).then(res => {
                   this.content = res.content
                   if (this.content.length === 1) {
