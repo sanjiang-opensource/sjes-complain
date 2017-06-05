@@ -78,7 +78,7 @@
       @click.native="submitResult" type="primary">提交处理结果
           </x-button>
           <x-button style="margin-top: 15px;width: 40%;height: 50px;font-size: 15px;color: white" type="warn"
-      @click.native="closeComplain">确认无效客诉
+      @click.native="closeComplain">确认无效投诉
           </x-button>
           </div>
 
@@ -235,7 +235,7 @@
               return this.complainDetail.customerComplainWxModel.imagePaths !== ''
             },
             confirm () {
-              if (this.detail === '确认关闭客诉？') {
+              if (this.detail === '确认无效投诉？') {
                 this.warn = true
                 if (this.result !== '' && this.turn === '') {
                   this.showAlert = false
