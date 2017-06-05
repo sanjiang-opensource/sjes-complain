@@ -41,7 +41,7 @@ const mutations = {
 }
 
 const actions = {
-  [type.COMPLAIN_PAGE_LIST] ({commit}, workId, page, size) {
+  getComplainList ({commit}, workId, page, size) {
     api.fetchSearchByWorkId(workId, page, size)
       .then(data => {
         commit(type.COMPLAIN_PAGE_LIST, data)

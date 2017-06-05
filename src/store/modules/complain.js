@@ -4,13 +4,17 @@ import * as api from '../../api'
 const state = {
   complainDetail: {
     customerComplainWxModel: {},
-    complainResults: []
+    complainResults: [],
+    shopIds: []
   },
-  shopName: null
+  message: {
+
+  }
 }
 
 const getters = {
-  complainDetail: state => state.complainDetail
+  complainDetail: state => state.complainDetail,
+  message: state => state.message
 }
 
 const mutations = {
@@ -18,21 +22,34 @@ const mutations = {
     state.complainDetail = data
   },
   [types.CLEAN_DETAIL] (state) {
-    state.customerComplainWxModel = {}
-    state.complainResults = []
+    state.complainDetail = {}
+  },
+  [types.SUBMIT_COMPLAIN] (state, data) {
+    // state.result = data
+    state.message = data
   }
 }
 
 const actions = {
-  getComplainDetail ({commit}, id) {
-    api.fetchItemById(id)
+  getComplainDetail ({commit}, res) {
+    api.fetchItemById(res)
       .then(data => {
-        console.log(data)
         commit(types.GET_COMPLAIN_ID, data)
       })
   },
   [types.CLEAN_DETAIL] ({commit}) {
     commit(types.CLEAN_DETAIL)
+  },
+  submitResult ({commit}, res) {
+    api.resultSubmit(res).then(data => {
+      commit(types.SUBMIT_COMPLAIN, data)
+    })
+  },
+  closeComplain ({commit}, res) {
+    api.closeComplain(res)
+      .then(data => {
+        commit(types.SUBMIT_COMPLAIN, data)
+      })
   }
 }
 
