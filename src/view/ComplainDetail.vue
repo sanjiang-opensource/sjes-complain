@@ -258,8 +258,8 @@
                   if (this.turn === '') {
                     this.shopName = this.complainDetail.customerComplainWxModel.receiveDept
                     this.shopId = this.complainDetail.customerComplainWxModel.receiveDeptNum
+                    this.turn = false
                   }
-                  console.log(this.shopName, this.shopId)
                   let data = new SubmitModel(this.result, this.$route.params.id, this.shopName, this.shopId, this.turn)
                   this.$store.dispatch('submitResult', data)
                   this.warnInfo = this.message.msg
