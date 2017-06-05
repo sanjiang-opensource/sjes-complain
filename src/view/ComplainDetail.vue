@@ -56,7 +56,7 @@
         </div>
       </div>
 
-      <div v-if="true">
+      <div v-if="isClose()">
         <divider style="display: flex">客诉处理</divider>
           <div class="box" style="margin-bottom: 0px">
           <cell title="投诉受理时间 ：" :value="complainDetail.customerComplainWxModel.acceptTimeStr" value-align="left"
