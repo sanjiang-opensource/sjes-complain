@@ -179,7 +179,6 @@
           },
           computed: mapGetters({
             complainDetail: 'complainDetail',
-//            content: 'content',
             workerId: 'workerId',
             message: 'message'
           }),
@@ -237,7 +236,6 @@
             },
             confirm () {
               if (this.detail === '确认关闭客诉？') {
-//                console.log(this.turn === '')
                 this.warn = true
                 if (this.result !== '' && this.turn === '') {
                   this.showAlert = false
@@ -258,11 +256,6 @@
                 } else {
                   this.showAlert = false
                   let data = new SubmitModel(this.result, this.$route.params.id, this.shopName, this.shopId, this.turn)
-//                  data.result = this.result
-//                  data.id = this.$route.params.id
-//                  data.shopName = this.shopName
-//                  data.shopId = this.shopId
-//                  data.turn = this.turn
                   this.$store.dispatch('submitResult', data)
                   this.warnInfo = this.message.msg
                 }
