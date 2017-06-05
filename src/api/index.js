@@ -42,7 +42,6 @@ export function fetchSearchByShopName (shopName, page = 1, limit = 20) {
 
 // 提交处理结果
 export function resultSubmit (res) {
-  console.log(res.shopName, res.id, res.result, res.shopId, res.turn)
   return submit(`/result/submit/1?result=${res.result}&complainId=${res.id}&shopName=${res.shopName}&shopId=${res.shopId}&turn=${res.turn}`)
 }
 

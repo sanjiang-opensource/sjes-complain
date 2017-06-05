@@ -138,7 +138,6 @@
         } from 'vux'
         import {mapGetters} from 'vuex'
         import SubmitModel from '../utils/SubmitModel'
-        import * as api from '../api/index'
 
         export default {
           directives: {
@@ -173,6 +172,7 @@
               showAlert: false,
               detail: '',
               warn: false,
+              dealResult: false,
               warnInfo: '',
               content: []
             }
@@ -184,6 +184,7 @@
           }),
           mounted () {
             this.$store.dispatch('getComplainDetail', {id: this.$route.params.id, workerId: this.$route.params.workerId})
+            this.warnInfo = ''
           },
           methods: {
             isClose () {
@@ -214,7 +215,7 @@
             },
             showSearchView: function () {
               if (this.turn) {
-                api.fetchSearchByShopName(this.shopName, 1, 20).then(res => {
+                this.$store.dispatch('getShopList', this.shopName, 1, 20).then(res => {
                   this.content = res.content
                   if (this.content.length === 1) {
                     this.shopName = this.content[0].shopName
@@ -242,14 +243,14 @@
                   var res = {}
                   res.result = this.result
                   res.id = this.$route.params.id
-                  this.$store.dispatch('closeComplain', res)
-                  this.warnInfo = this.message.msg
+                  this.$store.dispatch('closeComplain', res).then(data => {
+                    this.warnInfo = data.msg
+                  })
                 } else {
                   this.warnInfo = '处理意见不能为空且不能勾选转单'
                 }
               }
               if (this.detail === '确认提交转单？') {
-                this.warn = true
                 if (this.result === '') {
                   this.warn = true
                   this.warnInfo = '请将信息填写完整'
@@ -261,9 +262,10 @@
                     this.turn = false
                   }
                   let data = new SubmitModel(this.result, this.$route.params.id, this.shopName, this.shopId, this.turn)
-                  this.warnInfo = '提交成功'
-                  api.resultSubmit(data).then(data => {
-                    this.message.msg = data.msg
+                  this.$store.dispatch('submitResult', data).then(data => {
+                    this.warn = true
+                    this.warnInfo = data.msg
+                    this.dealResult = data.success
                   })
                 }
               }
@@ -272,7 +274,7 @@
               }
             },
             submitRes () {
-              if (this.message.msg.localeCompare('提交成功') === 0) {
+              if (this.dealResult) {
                 this.$router.push('/complain/?workerId=' + this.workerId)
                 this.$destroy()
               }
