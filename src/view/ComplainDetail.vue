@@ -56,7 +56,7 @@
         </div>
       </div>
 
-      <div v-if="isClose()">
+      <div v-if="true">
         <divider style="display: flex">客诉处理</divider>
           <div class="box" style="margin-bottom: 0px">
           <cell title="投诉受理时间 ：" :value="complainDetail.customerComplainWxModel.acceptTimeStr" value-align="left"
@@ -67,7 +67,7 @@
         style="border-style:double;border-width: 1px;border-color: #e1eeee"></x-textarea>
           <div style="display: flex;flex-direction: row;height: 100px;align-items: center;position: relative">
           <input v-model="turn" type="checkbox" style="height: 20px;width: 20px;margin-left: 10px">转单</input>
-          <x-input v-model="shopName" style="width: 25%;margin-left: 10px;height: 25px;background-color: #eeeeee"></x-input>
+          <x-input v-model="shopName" style="width: 25%;margin-left: 10px;height: 25px;background-color: #eeeeee" placeholder="输入商场名称"></x-input>
           <x-button style="margin-left: 10px;margin-right: 10px;width: 30%;height: 40px;font-size: 14px;color: white"
       @click.native="showSearchView" type="primary">选择商场
           </x-button>
@@ -95,10 +95,6 @@
               <cell :title="info.shopId" :value="info.shopName" style="width:100%;height: 60px" @click.native="chooseShop(info.shopName, info.shopId)">
                 <img slot="icon" width="30" style="display:block;margin-right:5px;" src="../assets/shop.png">
               </cell>
-
-              <!--<x-button style="width: 25%;height: 40px;font-size: 16px;margin-right: 10px"-->
-                        <!--@click.native="chooseShop(info.shopName, info.shopId)" type="primary">选择-->
-              <!--</x-button>-->
 
             </div>
           </div>
@@ -142,6 +138,7 @@
         } from 'vux'
         import {mapGetters} from 'vuex'
         import SubmitModel from '../utils/SubmitModel'
+        import * as api from '../api/index'
 
         export default {
           directives: {
@@ -176,12 +173,13 @@
               showAlert: false,
               detail: '',
               warn: false,
-              warnInfo: ''
+              warnInfo: '',
+              content: []
             }
           },
           computed: mapGetters({
             complainDetail: 'complainDetail',
-            content: 'content',
+//            content: 'content',
             workerId: 'workerId',
             message: 'message'
           }),
@@ -217,8 +215,19 @@
             },
             showSearchView: function () {
               if (this.turn) {
-                this.shopViewShow = true
-                this.$store.dispatch('getShopList', this.shopName)
+//                this.$store.dispatch('getShopList', this.shopName)
+                api.fetchSearchByShopName(this.shopName, 1, 20).then(res => {
+                  this.content = res.content
+                  if (this.content.length === 1) {
+                    this.shopName = this.content[0].shopName
+                    this.shopId = this.content[0].shopId
+                  } else if (this.content.length === 0) {
+                    this.warn = true
+                    this.warnInfo = '该门店不存在'
+                  } else {
+                    this.shopViewShow = true
+                  }
+                })
               } else {
                 this.detail = '请勾选转单按钮'
                 this.showAlert = true

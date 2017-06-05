@@ -31,7 +31,7 @@ const actions = {
   getShopList ({commit}, shopName, page, size) {
     api.fetchSearchByShopName(shopName, page, size)
       .then(data => {
-        commit(type.SHOP_LIST, data)
+        commit(type.SHOP_LIST, shopName, page, size)
       })
   },
   [type.CLEAN_SHOP_LIST] ({commit}) {
