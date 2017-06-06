@@ -25,7 +25,6 @@ const mutations = {
     state.complainDetail = {}
   },
   [types.SUBMIT_COMPLAIN] (state, data) {
-    // state.result = data
     state.message = data
   }
 }
@@ -41,15 +40,10 @@ const actions = {
     commit(types.CLEAN_DETAIL)
   },
   submitResult ({commit}, res) {
-    api.resultSubmit(res).then(data => {
-      commit(types.SUBMIT_COMPLAIN, data)
-    })
+    return api.resultSubmit(res)
   },
   closeComplain ({commit}, res) {
-    api.closeComplain(res)
-      .then(data => {
-        commit(types.SUBMIT_COMPLAIN, data)
-      })
+    return api.closeComplain(res)
   }
 }
 

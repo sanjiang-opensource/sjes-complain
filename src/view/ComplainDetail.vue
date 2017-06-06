@@ -56,7 +56,7 @@
         </div>
       </div>
 
-      <div v-if="true">
+      <div v-if="isClose()">
         <divider style="display: flex">客诉处理</divider>
           <div class="box" style="margin-bottom: 0px">
           <cell title="投诉受理时间 ：" :value="complainDetail.customerComplainWxModel.acceptTimeStr" value-align="left"
@@ -78,7 +78,7 @@
       @click.native="submitResult" type="primary">提交处理结果
           </x-button>
           <x-button style="margin-top: 15px;width: 40%;height: 50px;font-size: 15px;color: white" type="warn"
-      @click.native="closeComplain">确认无效客诉
+      @click.native="closeComplain">确认无效投诉
           </x-button>
           </div>
 
@@ -138,7 +138,6 @@
         } from 'vux'
         import {mapGetters} from 'vuex'
         import SubmitModel from '../utils/SubmitModel'
-        import * as api from '../api/index'
 
         export default {
           directives: {
@@ -164,7 +163,7 @@
           },
           data () {
             return {
-              turn: '',
+              turn: false,
               result: '',
               shopName: this.$store.state.shopName,
               shopId: null,
@@ -173,18 +172,21 @@
               showAlert: false,
               detail: '',
               warn: false,
+              dealResult: false,
               warnInfo: '',
-              content: []
+              content: [],
+              complainType: true,
+              isSubmit: false
             }
           },
           computed: mapGetters({
             complainDetail: 'complainDetail',
-//            content: 'content',
             workerId: 'workerId',
             message: 'message'
           }),
           mounted () {
             this.$store.dispatch('getComplainDetail', {id: this.$route.params.id, workerId: this.$route.params.workerId})
+            this.warnInfo = ''
           },
           methods: {
             isClose () {
@@ -197,12 +199,25 @@
               return this.complainDetail.complainResults.length !== 0
             },
             submitResult: function () {
-              this.detail = '确认提交转单？'
               this.showAlert = true
+              if (this.result === '' || this.turn === false || this.shopId === null) {
+                this.showAlert = true
+                this.detail = '请将信息填写完整'
+              } else {
+                this.detail = '确认提交转单？'
+                this.complainType = true
+                this.isSubmit = true
+              }
             },
             closeComplain: function () {
-              this.detail = '确认关闭客诉？'
               this.showAlert = true
+              if (this.result === '' || this.turn === true) {
+                this.detail = '处理意见不能为空且不能勾选转单'
+              } else {
+                this.complainType = false
+                this.detail = '确认关闭客诉？'
+                this.isSubmit = true
+              }
             },
             goBack: function () {
               this.$router.push('/complain/?workerId=' + this.workerId)
@@ -215,15 +230,14 @@
             },
             showSearchView: function () {
               if (this.turn) {
-//                this.$store.dispatch('getShopList', this.shopName)
-                api.fetchSearchByShopName(this.shopName, 1, 20).then(res => {
+                this.$store.dispatch('getShopList', this.shopName, 1, 20).then(res => {
                   this.content = res.content
                   if (this.content.length === 1) {
                     this.shopName = this.content[0].shopName
                     this.shopId = this.content[0].shopId
                   } else if (this.content.length === 0) {
-                    this.warn = true
-                    this.warnInfo = '该门店不存在'
+                    this.showAlert = true
+                    this.detail = '该门店不存在'
                   } else {
                     this.shopViewShow = true
                   }
@@ -237,43 +251,35 @@
               return this.complainDetail.customerComplainWxModel.imagePaths !== ''
             },
             confirm () {
-              if (this.detail === '确认关闭客诉？') {
-//                console.log(this.turn === '')
-                this.warn = true
-                if (this.result !== '' && this.turn === '') {
-                  this.showAlert = false
+              if (this.isSubmit === false) {
+                this.showAlert = false
+              } else {
+                if (this.complainType) {
+                  if (this.turn === '') {
+                    this.shopName = this.complainDetail.customerComplainWxModel.receiveDept
+                    this.shopId = this.complainDetail.customerComplainWxModel.receiveDeptNum
+                    this.turn = false
+                  }
+                  let data = new SubmitModel(this.result, this.$route.params.id, this.shopName, this.shopId, this.turn)
+                  this.$store.dispatch('submitResult', data).then(data => {
+                    this.warnInfo = data.msg
+                    this.warn = true
+                    this.dealResult = data.success
+                  })
+                } else {
                   var res = {}
                   res.result = this.result
                   res.id = this.$route.params.id
-                  this.$store.dispatch('closeComplain', res)
-                  this.warnInfo = this.message.msg
-                } else {
-                  this.warnInfo = '处理意见不能为空且不能勾选转单'
+                  this.$store.dispatch('closeComplain', res).then(data => {
+                    this.warnInfo = data.msg
+                    this.warn = true
+                    this.dealResult = data.success
+                  })
                 }
-              }
-              if (this.detail === '确认提交转单？') {
-                this.warn = true
-                if (this.result === '' || this.turn === '' || this.shopId === null) {
-                  this.warn = true
-                  this.warnInfo = '请将信息填写完整'
-                } else {
-                  this.showAlert = false
-                  let data = new SubmitModel(this.result, this.$route.params.id, this.shopName, this.shopId, this.turn)
-//                  data.result = this.result
-//                  data.id = this.$route.params.id
-//                  data.shopName = this.shopName
-//                  data.shopId = this.shopId
-//                  data.turn = this.turn
-                  this.$store.dispatch('submitResult', data)
-                  this.warnInfo = this.message.msg
-                }
-              }
-              if (this.detail === '请勾选转单按钮') {
-                this.showAlert = false
               }
             },
             submitRes () {
-              if (this.warnInfo === this.message.msg) {
+              if (this.dealResult) {
                 this.$router.push('/complain/?workerId=' + this.workerId)
                 this.$destroy()
               }

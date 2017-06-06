@@ -18,6 +18,5 @@ export default new Vuex.Store({
     shopList
   },
   strict: debug,
-  plugins: debug ? [createLogger()] : []
+  plugins: []
 })
-

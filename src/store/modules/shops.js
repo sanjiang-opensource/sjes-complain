@@ -29,10 +29,7 @@ const mutations = {
 
 const actions = {
   getShopList ({commit}, shopName, page, size) {
-    api.fetchSearchByShopName(shopName, page, size)
-      .then(data => {
-        commit(type.SHOP_LIST, shopName, page, size)
-      })
+    return api.fetchSearchByShopName(shopName, page, size)
   },
   [type.CLEAN_SHOP_LIST] ({commit}) {
     commit(type.CLEAN_SHOP_LIST)
