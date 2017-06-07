@@ -67,7 +67,7 @@
         style="border-style:double;border-width: 1px;border-color: #e1eeee"></x-textarea>
           <div style="display: flex;flex-direction: row;height: 100px;align-items: center;position: relative">
           <input v-model="turn" type="checkbox" style="height: 20px;width: 20px;margin-left: 10px">转单</input>
-          <x-input v-model="shopName" style="width: 25%;margin-left: 10px;height: 25px;background-color: #eeeeee" placeholder="输入商场名称"></x-input>
+          <x-input v-show="turn" v-model="shopName" style="width: 25%;margin-left: 10px;height: 25px;background-color: #eeeeee" placeholder="输入商场名称"></x-input>
           <x-button style="margin-left: 10px;margin-right: 10px;width: 30%;height: 40px;font-size: 14px;color: white"
       @click.native="showSearchView" type="primary">选择商场
           </x-button>
@@ -200,23 +200,30 @@
             },
             submitResult: function () {
               this.showAlert = true
-              if (this.result === '' || this.turn === false || this.shopId === null) {
-                this.showAlert = true
-                this.detail = '请将信息填写完整'
+              if (this.result === '') {
+                this.detail = '请填写处理结果'
               } else {
-                this.detail = '确认提交转单？'
-                this.complainType = true
-                this.isSubmit = true
+                if (this.turn === true && this.shopId === null) {
+                  this.detail = '转单时必须选择门店'
+                } else {
+                  this.detail = '确认提交转单？'
+                  this.complainType = true
+                  this.isSubmit = true
+                }
               }
             },
             closeComplain: function () {
               this.showAlert = true
-              if (this.result === '' || this.turn === true) {
-                this.detail = '处理意见不能为空且不能勾选转单'
+              if (this.result === '') {
+                this.detail = '处理意见不能为空'
               } else {
-                this.complainType = false
-                this.detail = '确认关闭客诉？'
-                this.isSubmit = true
+                if (this.turn === true) {
+                  this.detail = '关闭客诉不能勾选转单'
+                } else {
+                  this.complainType = false
+                  this.detail = '确认关闭客诉？'
+                  this.isSubmit = true
+                }
               }
             },
             goBack: function () {
