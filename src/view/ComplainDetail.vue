@@ -258,26 +258,10 @@
               return this.complainDetail.customerComplainWxModel.imagePaths !== ''
             },
             confirm () {
-              if (this.detail === '确认无效投诉？') {
-                this.warn = true
-                if (this.result !== '' && this.turn === '') {
-                  this.showAlert = false
-                  var res = {}
-                  res.result = this.result
-                  res.id = this.$route.params.id
-                  this.$store.dispatch('closeComplain', res).then(data => {
-                    this.warnInfo = data.msg
-                  })
-                } else {
-                  this.warnInfo = '处理意见不能为空且不能勾选转单'
-                }
-              }
-              if (this.detail === '确认提交转单？') {
-                if (this.result === '') {
-                  this.warn = true
-                  this.warnInfo = '请将信息填写完整'
-                } else {
-                  this.showAlert = false
+              if (this.isSubmit === false) {
+                this.showAlert = false
+              } else {
+                if (this.complainType) {
                   if (this.turn === '') {
                     this.shopName = this.complainDetail.customerComplainWxModel.receiveDept
                     this.shopId = this.complainDetail.customerComplainWxModel.receiveDeptNum
@@ -285,8 +269,17 @@
                   }
                   let data = new SubmitModel(this.result, this.$route.params.id, this.shopName, this.shopId, this.turn)
                   this.$store.dispatch('submitResult', data).then(data => {
-                    this.warn = true
                     this.warnInfo = data.msg
+                    this.warn = true
+                    this.dealResult = data.success
+                  })
+                } else {
+                  var res = {}
+                  res.result = this.result
+                  res.id = this.$route.params.id
+                  this.$store.dispatch('closeComplain', res).then(data => {
+                    this.warnInfo = data.msg
+                    this.warn = true
                     this.dealResult = data.success
                   })
                 }
