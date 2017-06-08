@@ -4,6 +4,7 @@ import complainList from './modules/complains'
 import complain from './modules/complain'
 import shopList from './modules/shops'
 import actions from './actions'
+// import createLogger from 'vuex/src/plugins/logger'
 
 Vue.use(Vuex)
 

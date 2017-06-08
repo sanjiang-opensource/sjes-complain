@@ -7,16 +7,14 @@
       <Spinner :show="loading"></Spinner>
     </section>
     <toast v-model="show" type="success" :text="loadingText"></toast>
+    <divider v-show="end" style="display: flex;">我是有底线的</divider>
   </div>
-
-
-
 </template>
 
 <script>
   import Spinner from '../components/Spinner.vue'
   import InfiniteScroll from 'vue-infinite-scroll'
-  import {ViewBox, Cell, XHeader, Toast} from 'vux'
+  import {ViewBox, Cell, XHeader, Toast, Divider} from 'vux'
   import Item from '../components/Item.vue'
   import * as api from '../api'
 
@@ -27,7 +25,8 @@
       XHeader,
       Spinner,
       Toast,
-      Item
+      Item,
+      Divider
     },
     directives: {InfiniteScroll},
     data () {
@@ -43,7 +42,8 @@
         ],
         loading: true,
         show: false,
-        loadingText: '数据加载完成'
+        loadingText: '数据加载完成',
+        end: false
       }
     },
     created () {
@@ -58,6 +58,7 @@
     methods: {
       loadMore () {
         let page = this.list.length / this.size + 1
+//        console.log(page)
         this.busy = true
         this.isScroll = true
         this.loading = true
@@ -69,11 +70,14 @@
             if (this.list.length < totalCount) {
               this.busy = false
             }
+            let endListCount = totalCount - this.list.length
+//            console.log(endListCount + '+' + this.size)
+            if (endListCount === 0) {
+              this.loadingText = '已加载全部数据'
+              this.end = true
+            }
             this.loading = false
             this.isScroll = false
-            if (res.list.length < 10) {
-              this.loadingText = '已加载全部数据'
-            }
           }, (error) => {
             this.show = true
             this.loading = false
