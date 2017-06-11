@@ -26,8 +26,8 @@ export function submit (url) {
 }
 
 // 根据工号分页显示
-export function fetchSearchByWorkId (jobNum, page = 1, limit = 10) {
-  return fetch(`/pageList?jobNum=${jobNum}&page=${page}&limit=${limit}`)
+export function fetchSearchByWorkId (res, page = 1, limit = 10) {
+  return fetch(`/wx/pageList?jobNum=${res.jobNum}&page=${page}&limit=${limit}&receiveDept=${res.receiveDept}`)
 }
 
 // 根据id获取客诉详情
