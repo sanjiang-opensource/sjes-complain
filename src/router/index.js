@@ -9,11 +9,17 @@ const router = new Router({
     {
       path: '/complain/detail/:id/:workerId',
       name: 'Detail',
+      meta: {
+        title: '客诉详情'
+      },
       component: require('../view/ComplainDetail.vue')
     },
     {
       path: '/:workerId',
       name: 'DetailList',
+      meta: {
+        title: '客诉列表'
+      },
       component: require('../view/ComplainList.vue')
     }
   ],

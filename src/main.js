@@ -11,6 +11,7 @@ import {ConfirmPlugin} from 'vux'
 import * as filters from './utils/filters'
 
 Vue.use(ConfirmPlugin)
+Vue.use(require('vue-wechat-title'))
 // 定义全局filter
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
