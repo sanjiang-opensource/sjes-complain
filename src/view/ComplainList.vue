@@ -2,9 +2,9 @@
   <div style="background-color: #eeeeee">
     <x-header style="position: fixed;z-index: 9999;width: 100%;height: 50px;top:0px" :left-options="{showBack: false}">投诉列表</x-header>
     <section class="grid" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10" drapload-key="ascroll" drapload-up="loadMore ()">
-      <group v-show="showSelect" style="height: 50px;background-color: white">
-        <selector placeholder="请选择受理商场" v-model="shopName" :options="shops" @on-change="changeShop"></selector>
-      </group>
+      <!--<group v-show="showSelect" style="height: 50px;background-color: white">-->
+        <!--<selector title="受理商场" placeholder="请选择受理商场" v-model="shopName" :options="shops" @on-change="changeShop"></selector>-->
+      <!--</group>-->
       <item v-for="info in list" style="display: flex;flex-direction: column;margin-bottom: 20px;position: relative;width: 100%;background-color: white" :key="info.id" :item="info">
       </item>
       <Spinner :show="loading"></Spinner>
@@ -99,38 +99,38 @@
               this.loadingText = '数据加载失败: 服务器接口异常'
             }
           })
-      },
-      changeShop () {
-        this.loadingText = '数据加载完成'
-        this.end = false
-        this.data.receiveDept = this.shopName
-        this.busy = true
-        this.isScroll = true
-        this.loading = true
-        api.fetchSearchByWorkId(this.data, 1, this.size)
-          .then(res => {
-            this.show = true
-            this.list = res.list
-            console.log(this.list)
-            this.shops = res.shops
-            let totalCount = res.totalCount
-            if (this.list.length < totalCount) {
-              this.busy = false
-            }
-            let endListCount = totalCount - this.list.length
-            if (endListCount === 0) {
-              this.loadingText = '已加载全部数据'
-              this.end = true
-            }
-            this.loading = false
-            this.isScroll = false
-          }, (error) => {
-            this.show = true
-            this.loading = false
-            if (error.response.status === 500) {
-              this.loadingText = '数据加载失败: 服务器接口异常'
-            }
-          })
+//      },
+//      changeShop () {
+//        this.loadingText = '数据加载完成'
+//        this.end = false
+//        this.data.receiveDept = this.shopName
+//        this.busy = true
+//        this.isScroll = true
+//        this.loading = true
+//        api.fetchSearchByWorkId(this.data, 1, this.size)
+//          .then(res => {
+//            this.show = true
+//            this.list = res.list
+//            console.log(this.list)
+//            this.shops = res.shops
+//            let totalCount = res.totalCount
+//            if (this.list.length < totalCount) {
+//              this.busy = false
+//            }
+//            let endListCount = totalCount - this.list.length
+//            if (endListCount === 0) {
+//              this.loadingText = '已加载全部数据'
+//              this.end = true
+//            }
+//            this.loading = false
+//            this.isScroll = false
+//          }, (error) => {
+//            this.show = true
+//            this.loading = false
+//            if (error.response.status === 500) {
+//              this.loadingText = '数据加载失败: 服务器接口异常'
+//            }
+//          })
       }
     },
     destoryed () {
