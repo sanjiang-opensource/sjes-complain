@@ -7,6 +7,8 @@ const state = {
   totalCount: null,
   current: null,
   list: [],
+  shops: [],
+  area: false,
   busy: false,
   workerId: null
 }
@@ -41,8 +43,8 @@ const mutations = {
 }
 
 const actions = {
-  getComplainList ({commit}, workId, page, size) {
-    api.fetchSearchByWorkId(workId, page, size)
+  getComplainList ({commit}, res, page, size) {
+    api.fetchSearchByWorkId(res, page, size)
       .then(data => {
         commit(type.COMPLAIN_PAGE_LIST, data)
       })

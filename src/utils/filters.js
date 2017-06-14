@@ -7,7 +7,7 @@ Vue.filter('statusName', function (value) {
   } else if (value === 2) {
     status = '已完成'
   } else {
-    status = '已关闭'
+    status = '无效投诉'
   }
   return status
 })

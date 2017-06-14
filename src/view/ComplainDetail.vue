@@ -3,7 +3,7 @@
     <x-header :left-options="{preventGoBack: true}" style="position: fixed;width: 100%;height: 50px;top:0px;z-index: 10"
               @on-click-back="goBack">投诉详情
     </x-header>
-    <div style="display: flex;flex-direction: column;z-index: 10;background-color: #eeeeee;margin-top: 50px">
+    <div onscroll="true" style="display: flex;flex-direction: column;z-index: 10;background-color: #eeeeee;margin-top: 50px">
       <div label-width="4.5em" label-margin-right="2em" label-align="right"
            style="background-color: white;display: flex;margin-bottom: 10px;flex-direction: column">
         <cell title="投诉时间 ：" :value="complainDetail.customerComplainWxModel.complainTime | timeToString" value-align="left">
@@ -205,6 +205,10 @@
               } else {
                 if (this.turn === true && this.shopId === null) {
                   this.detail = '转单时必须选择门店'
+                } else if (this.turn === false && this.shopId === null) {
+                  this.detail = '确认提交处理？'
+                  this.complainType = true
+                  this.isSubmit = true
                 } else {
                   this.detail = '确认提交转单？'
                   this.complainType = true
