@@ -205,6 +205,10 @@
               } else {
                 if (this.turn === true && this.shopId === null) {
                   this.detail = '转单时必须选择门店'
+                } else if (this.turn === false && this.shopId === null) {
+                  this.detail = '确认提交处理？'
+                  this.complainType = true
+                  this.isSubmit = true
                 } else {
                   this.detail = '确认提交转单？'
                   this.complainType = true
