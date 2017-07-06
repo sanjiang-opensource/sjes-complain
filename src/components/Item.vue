@@ -4,7 +4,7 @@
     <cell title="受理部门 ：" :value="item.receiveDept" value-align="left" label-margin-left="2em"></cell>
     <cell title="投诉内容 ：" :inline-desc="item.complainContent" style="word-break: break-all "></cell>
     <cell :border-intent="false" :title="item.overTime | changeTitle" :value="item.complainStat | statusName"
-          style="height: 60px;color: red;" :link="'/complain/detail/'+item.id+'/'+workerId">
+          :class="overTime(item.overTime)" :link="'/complain/detail/'+item.id+'/'+workerId">
       <img slot="icon" width="25" class="img" src="../assets/outtime.png">
     </cell>
   </div>
@@ -31,6 +31,15 @@
     },
     mounted () {
       this.workerId = this.$route.query.workerId
+    },
+    methods: {
+      overTime (status) {
+        if (status) {
+          return 'overTime'
+        } else {
+          return 'noOver'
+        }
+      }
     }
   }
 </script>
@@ -39,5 +48,15 @@
   .img {
     display: block;
     margin-right: 5px;
+  }
+
+  .overTime {
+    height: 60px;
+    color: red;
+  }
+
+  .noOver {
+    height: 60px;
+    color: green;
   }
 </style>
