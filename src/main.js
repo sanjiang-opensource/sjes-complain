@@ -9,9 +9,11 @@ import store from './store'
 import router from './router'
 import {ConfirmPlugin} from 'vux'
 import * as filters from './utils/filters'
+import Croppa from 'vue-croppa'
 
 Vue.use(ConfirmPlugin)
 Vue.use(require('vue-wechat-title'))
+Vue.use(Croppa)
 // 定义全局filter
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])

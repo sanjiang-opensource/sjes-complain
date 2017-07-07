@@ -31,10 +31,7 @@ const mutations = {
 
 const actions = {
   getComplainDetail ({commit}, res) {
-    api.fetchItemById(res)
-      .then(data => {
-        commit(types.GET_COMPLAIN_ID, data)
-      })
+    return api.fetchItemById(res)
   },
   [types.CLEAN_DETAIL] ({commit}) {
     commit(types.CLEAN_DETAIL)

@@ -3,9 +3,12 @@
     <cell title="投诉时间 ：" :value="item.complainTime | timeToString" value-align="left" label-margin-left="2em"></cell>
     <cell title="受理部门 ：" :value="item.receiveDept" value-align="left" label-margin-left="2em"></cell>
     <cell title="投诉内容 ：" :inline-desc="item.complainContent" style="word-break: break-all "></cell>
-    <cell :border-intent="false" :title="item.overTime | changeTitle" :value="item.complainStat | statusName"
-          :class="overTime(item.overTime)" :link="'/complain/detail/'+item.id+'/'+workerId">
+    <cell :border-intent="false" :title="item.overTime | changeTitle"
+          :link="'/complain/detail/'+item.id+'/'+workerId" :style="changeStyle">
       <img slot="icon" width="25" class="img" src="../assets/outtime.png">
+      <div slot="value">
+        <span :style="changeValueStyle">{{item.complainStat | statusName}}</span>
+      </div>
     </cell>
   </div>
 </template>
@@ -32,12 +35,19 @@
     mounted () {
       this.workerId = this.$route.query.workerId
     },
-    methods: {
-      overTime (status) {
-        if (status) {
-          return 'overTime'
+    computed: {
+      changeStyle: function () {
+        if (this.item.overTime === 1) {
+          return 'height:60;color:red'
         } else {
-          return 'noOver'
+          return 'height:60;color:green'
+        }
+      },
+      changeValueStyle: function () {
+        if (this.item.complainStat === 1) {
+          return 'color:red'
+        } else {
+          return 'color:green'
         }
       }
     }

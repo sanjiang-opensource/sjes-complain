@@ -1,6 +1,6 @@
 <template>
   <div style="background-color: #eeeeee">
-    <x-header style="position: fixed;z-index: 9999;width: 100%;height: 50px;top:0px" :left-options="{showBack: false}">投诉列表</x-header>
+    <x-header style="position: fixed;z-index: 9999;width: 100%;height: 50px;top:0px" :left-options="{showBack: false}">客诉列表</x-header>
     <section class="grid" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10" drapload-key="ascroll" drapload-up="loadMore ()">
       <!--<group v-show="showSelect" style="height: 50px;background-color: white">-->
         <!--<selector title="受理商场" placeholder="请选择受理商场" v-model="shopName" :options="shops" @on-change="changeShop"></selector>-->
