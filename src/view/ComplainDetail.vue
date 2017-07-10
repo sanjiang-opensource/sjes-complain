@@ -24,8 +24,11 @@
         <cell title="购买门店 ：" :value="complainDetail.customerComplainWxModel.gateShop" value-align="left">
           <img slot="icon" width="25" style="display:block;margin-right:5px;" src="../assets/shop.png">
         </cell>
-        <cell title="客户电话 ：" :value="complainDetail.customerComplainWxModel.mobile" value-align="left" @click.native="call" is-link>
+        <cell title="客户电话 ：" value-align="left" @click.native="call" is-link>
           <img slot="icon" width="25" style="display:block;margin-right:5px;" src="../assets/mobile.png">
+          <div slot="value">
+            <span style="color: dodgerblue;text-decoration:underline">{{complainDetail.customerComplainWxModel.mobile}}</span>
+          </div>
         </cell>
         <cell title="投诉类型 ：" :value="complainDetail.customerComplainWxModel.complainType" value-align="left">
           <img slot="icon" width="25" style="display:block;margin-right:5px;" src="../assets/complain.png">
