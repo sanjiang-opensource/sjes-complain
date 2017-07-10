@@ -5,7 +5,9 @@
       <!--<group v-show="showSelect" style="height: 50px;background-color: white">-->
         <!--<selector title="受理商场" placeholder="请选择受理商场" v-model="shopName" :options="shops" @on-change="changeShop"></selector>-->
       <!--</group>-->
-      <item v-for="info in list" style="display: flex;flex-direction: column;margin-bottom: 20px;position: relative;width: 100%;background-color: white" :key="info.id" :item="info">
+      <item v-for="info in list"
+            style="display: flex;flex-direction: column;margin-bottom: 20px;position: relative;width: 100%;background-color: white" :item="info"
+            :link="'/complain/detail/'+info.id+'/'+workerId">
       </item>
       <Spinner :show="loading"></Spinner>
     </section>

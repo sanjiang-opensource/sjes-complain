@@ -24,7 +24,7 @@
         <cell title="购买门店 ：" :value="complainDetail.customerComplainWxModel.gateShop" value-align="left">
           <img slot="icon" width="25" style="display:block;margin-right:5px;" src="../assets/shop.png">
         </cell>
-        <cell title="客户电话 ：" :value="complainDetail.customerComplainWxModel.mobile" value-align="left">
+        <cell title="客户电话 ：" :value="complainDetail.customerComplainWxModel.mobile" value-align="left" @click.native="call" is-link>
           <img slot="icon" width="25" style="display:block;margin-right:5px;" src="../assets/mobile.png">
         </cell>
         <cell title="投诉类型 ：" :value="complainDetail.customerComplainWxModel.complainType" value-align="left">
@@ -331,9 +331,9 @@
         // 获取当前图片地址
         this.imgUrl = imgUrl
       },
-      viewImg () {
+      call () {
         console.log(1)
-        this.showImg = false
+        window.location.href = 'tel://' + this.complainDetail.customerComplainWxModel.mobile
       }
     },
     destroyed () {

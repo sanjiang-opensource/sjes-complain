@@ -1,10 +1,9 @@
 <template>
-  <div>
+  <div @click="onClick">
     <cell title="投诉时间 ：" :value="item.complainTime | timeToString" value-align="left" label-margin-left="2em"></cell>
     <cell title="受理部门 ：" :value="item.receiveDept" value-align="left" label-margin-left="2em"></cell>
     <cell title="投诉内容 ：" :inline-desc="item.complainContent" style="word-break: break-all "></cell>
-    <cell :border-intent="false" :title="item.overTime | changeTitle"
-          :link="'/complain/detail/'+item.id+'/'+workerId" :style="changeStyle">
+    <cell :border-intent="false" :title="item.overTime | changeTitle" :style="changeStyle">
       <img slot="icon" width="25" class="img" src="../assets/outtime.png">
       <div slot="value">
         <span :style="changeValueStyle">{{item.complainStat | statusName}}</span>
@@ -15,6 +14,7 @@
 
 <script>
   import {Cell} from 'vux'
+  import { go } from 'vux/src/libs/router'
 
   export default {
     name: 'complain-item',
@@ -22,7 +22,8 @@
       'item': {
         type: Object,
         default: null
-      }
+      },
+      link: String
     },
     components: {
       Cell
@@ -46,9 +47,17 @@
       changeValueStyle: function () {
         if (this.item.complainStat === 1) {
           return 'color:red'
+        } else if (this.item.complainStat === 4) {
+          return 'color:orange'
         } else {
           return 'color:green'
         }
+      }
+    },
+    methods: {
+      onClick () {
+        console.log(1)
+        go(this.link, this.$router)
       }
     }
   }

@@ -6,8 +6,10 @@ Vue.filter('statusName', function (value) {
     status = '待处理'
   } else if (value === 2) {
     status = '已完成'
-  } else {
+  } else if (value === 3) {
     status = '无效投诉'
+  } else {
+    status = '处理中'
   }
   return status
 })
