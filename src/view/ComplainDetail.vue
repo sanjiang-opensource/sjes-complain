@@ -215,12 +215,10 @@
       message: 'message'
     }),
     created () {
-      console.log(this.complainDetail)
       this.$store.dispatch('getComplainDetail', {id: this.$route.params.id, workerId: this.$route.params.workerId}).then(res => {
         this.complainDetail = res
       })
       this.warnInfo = ''
-      console.log(11)
     },
     methods: {
       isClose () {

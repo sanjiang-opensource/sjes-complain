@@ -14,7 +14,7 @@
 
 <script>
   import {Cell} from 'vux'
-  import { go } from 'vux/src/libs/router'
+  import {go} from 'vux/src/libs/router'
 
   export default {
     name: 'complain-item',
@@ -56,7 +56,7 @@
     },
     methods: {
       onClick () {
-        console.log(1)
+        window.history.pushState({}, '客诉详情', '')
         go(this.link, this.$router)
       }
     }
