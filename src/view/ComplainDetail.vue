@@ -224,10 +224,6 @@
       })
       this.warnInfo = ''
     },
-    beforeMount () {
-      history.pushState({state: 'complainDetail'}, '客诉详情', '')
-      console.log(history)
-    },
     methods: {
       isClose () {
         let complainStat = this.complainDetail.customerComplainWxModel.complainStat

@@ -65,14 +65,9 @@
       this.$store.commit('INIT_WORKERID', this.workerId)
       this.$store.dispatch('getComplainList', this.data)
     },
-    beforeMount () {
-      history.replaceState({state: 'complainList'}, '客诉列表', '')
-    },
     mounted () {
       this.page = this.$store.getters.page
       this.size = this.$store.getters.size
-      console.log(history)
-//      window.addEventListener('scroll', this.menu)
     },
     methods: {
       loadMore () {
