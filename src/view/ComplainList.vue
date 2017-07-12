@@ -60,6 +60,7 @@
       }
     },
     created () {
+      history.pushState({}, '客诉列表', '')
       this.workerId = this.$route.query.workerId
       this.data = new ComplainListModel(this.shopName, this.workerId)
       this.$store.commit('INIT_WORKERID', this.workerId)

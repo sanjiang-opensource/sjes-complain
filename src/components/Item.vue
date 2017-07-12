@@ -56,7 +56,6 @@
     },
     methods: {
       onClick () {
-        history.pushState({}, '客诉详情', '')
         go(this.link, this.$router)
       }
     }

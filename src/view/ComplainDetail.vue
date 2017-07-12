@@ -186,6 +186,7 @@
 //      Croppa
     },
     beforeCreate () {
+      history.pushState({}, '客诉详情', '')
       this.shopName = this.$store.state.shopName
     },
     data () {
