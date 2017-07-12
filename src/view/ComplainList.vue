@@ -6,7 +6,7 @@
         <!--<selector title="受理商场" placeholder="请选择受理商场" v-model="shopName" :options="shops" @on-change="changeShop"></selector>-->
       <!--</group>-->
       <item v-for="info in list"
-            style="display: flex;flex-direction: column;margin-bottom: 20px;position: relative;width: 100%;background-color: white" :item="info"
+            style="display: flex;flex-direction: column;margin-bottom: 20px;position: relative;width: 100%;background-color: white" :item="info" :key="info"
             :link="'/complain/detail/'+info.id+'/'+workerId">
       </item>
       <Spinner :show="loading"></Spinner>
@@ -60,15 +60,18 @@
       }
     },
     created () {
-      history.pushState({}, '客诉列表', '')
       this.workerId = this.$route.query.workerId
       this.data = new ComplainListModel(this.shopName, this.workerId)
       this.$store.commit('INIT_WORKERID', this.workerId)
       this.$store.dispatch('getComplainList', this.data)
     },
+    beforeMount () {
+      history.pushState({state: 'complainList'}, '客诉列表', '')
+    },
     mounted () {
       this.page = this.$store.getters.page
       this.size = this.$store.getters.size
+      console.log(history)
 //      window.addEventListener('scroll', this.menu)
     },
     methods: {

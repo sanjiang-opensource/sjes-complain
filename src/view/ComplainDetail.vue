@@ -27,7 +27,8 @@
         <cell title="客户电话 ：" value-align="left" @click.native="call" is-link>
           <img slot="icon" width="25" style="display:block;margin-right:5px;" src="../assets/mobile.png">
           <div slot="value">
-            <span style="color: dodgerblue;text-decoration:underline">{{complainDetail.customerComplainWxModel.mobile}}</span>
+            <span
+              style="color: dodgerblue;text-decoration:underline">{{complainDetail.customerComplainWxModel.mobile}}</span>
           </div>
         </cell>
         <cell title="投诉类型 ：" :value="complainDetail.customerComplainWxModel.complainType" value-align="left">
@@ -44,7 +45,7 @@
           <!--<swiper height="250px" :list="complainDetail.customerComplainWxModel.imagePathLists" :loop="true"-->
           <!--dots-class="custom-bottom" dots-position="center"></swiper>-->
           <swiper height="250px" dots-position="center">
-            <swiper-item style="width: 100%" v-for="info in complainDetail.customerComplainWxModel.imagePathLists">
+            <swiper-item style="width: 100%" v-for="info in complainDetail.customerComplainWxModel.imagePathLists" :key="info">
               <img :src="info.img" @click="clickImg($event, info.img)"/>
             </swiper-item>
           </swiper>
@@ -102,7 +103,7 @@
         <div style="background-color: #eeeeee;overflow-y: auto;height: 400px;">
           <div
             style="display: flex;flex-direction: row;position: relative;align-items: center;margin-bottom: 10px;background-color: white"
-            v-for="info in content">
+            v-for="info in content" :key="info">
 
             <cell :title="info.shopId" :value="info.shopName" style="width:100%;height: 60px"
                   @click.native="chooseShop(info.shopName, info.shopId)">
@@ -161,7 +162,6 @@
   } from 'vux'
   import {mapGetters} from 'vuex'
   import SubmitModel from '../utils/SubmitModel'
-//  import Croppa from 'vue-croppa'
   import 'vue-croppa/dist/vue-croppa.css'
 
   export default {
@@ -186,7 +186,6 @@
 //      Croppa
     },
     beforeCreate () {
-      history.pushState({}, '客诉详情', '')
       this.shopName = this.$store.state.shopName
     },
     data () {
@@ -207,19 +206,27 @@
         content: [],
         complainType: true,
         isSubmit: false,
-        complainDetail: {}
+        complainDetail: {
+          customerComplainWxModel: {}
+        }
       }
     },
     computed: mapGetters({
-//      complainDetail: 'complainDetail',
       workerId: 'workerId',
       message: 'message'
     }),
     created () {
-      this.$store.dispatch('getComplainDetail', {id: this.$route.params.id, workerId: this.$route.params.workerId}).then(res => {
+      this.$store.dispatch('getComplainDetail', {
+        id: this.$route.params.id,
+        workerId: this.$route.params.workerId
+      }).then(res => {
         this.complainDetail = res
       })
       this.warnInfo = ''
+    },
+    beforeMount () {
+      history.pushState({state: 'complainDetail'}, '客诉详情', '')
+      console.log(history)
     },
     methods: {
       isClose () {
