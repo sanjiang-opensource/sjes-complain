@@ -66,7 +66,7 @@
       this.$store.dispatch('getComplainList', this.data)
     },
     beforeMount () {
-      history.pushState({state: 'complainList'}, '客诉列表', '')
+      history.replaceState({state: 'complainList'}, '客诉列表', '')
     },
     mounted () {
       this.page = this.$store.getters.page
