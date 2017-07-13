@@ -1,9 +1,6 @@
 <template>
   <div style="background-color: #eeeeee">
     <section class="grid" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10" drapload-key="ascroll" drapload-up="loadMore ()">
-      <!--<group v-show="showSelect" style="height: 50px;background-color: white">-->
-        <!--<selector title="受理商场" placeholder="请选择受理商场" v-model="shopName" :options="shops" @on-change="changeShop"></selector>-->
-      <!--</group>-->
       <item v-for="info in list"
             style="display: flex;flex-direction: column;margin-bottom: 20px;position: relative;width: 100%;background-color: white" :item="info" :key="info"
             :link="'/complain/detail/'+info.id+'/'+workerId">
@@ -13,7 +10,7 @@
     <toast v-model="show" type="success" :text="loadingText"></toast>
     <divider v-if="end" style="display: flex;">我是有底线的</divider>
     <tabbar style="position:fixed" >
-      <tabbar-item v-for="info in complainStatus" :badge="info.statCounts.toString()" @on-item-click="statSelect(info.complainStat, info.order)" :key="info" >
+      <tabbar-item v-for="info in complainStatus" :badge="info.statCounts" @on-item-click="statSelect(info.complainStat, info.order)" :key="info" >
         <img slot="icon" :src="info.imageUrl">
         <span slot="label">{{info.statName}}</span>
       </tabbar-item>
@@ -86,13 +83,11 @@
     methods: {
       loadMore () {
         let page = this.list.length / this.size + 1
-//        console.log(page)
         this.busy = true
         this.isScroll = true
         this.loading = true
         api.fetchSearchByWorkId(this.data, page, this.size)
           .then(res => {
-//            console.log(res.statuGroup.待处理)
             if (page === 1) {
               this.complainStatus = this.complainStatus.concat(res.complainStatus)
             }
@@ -105,7 +100,6 @@
             }
             let endListCount = totalCount - this.list.length
             if (endListCount === 0) {
-              console.log(1)
               this.loadingText = '已加载全部数据'
               this.end = true
             }
@@ -160,7 +154,6 @@
           if (i === order - 1) {
             this.complainStatus[i].imageUrl = this.complainStatus[i].imageUrl.replace('-1', '')
           } else {
-            console.log(this.complainStatus[i].imageUrl.indexOf('-1'))
             if (this.complainStatus[i].imageUrl.indexOf('-1') > 0) {
             } else {
               this.complainStatus[i].imageUrl = this.complainStatus[i].imageUrl.substring(0, this.complainStatus[i].imageUrl.length - 4) + '-1.png'
