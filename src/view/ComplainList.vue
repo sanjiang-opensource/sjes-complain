@@ -1,6 +1,5 @@
 <template>
   <div style="background-color: #eeeeee">
-    <x-header style="position: fixed;z-index: 9999;width: 100%;height: 50px;top:0px" :left-options="{showBack: false}">客诉列表</x-header>
     <section class="grid" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10" drapload-key="ascroll" drapload-up="loadMore ()">
       <!--<group v-show="showSelect" style="height: 50px;background-color: white">-->
         <!--<selector title="受理商场" placeholder="请选择受理商场" v-model="shopName" :options="shops" @on-change="changeShop"></selector>-->
@@ -12,14 +11,20 @@
       <Spinner :show="loading"></Spinner>
     </section>
     <toast v-model="show" type="success" :text="loadingText"></toast>
-    <divider v-show="end" style="display: flex;">我是有底线的</divider>
+    <divider v-if="end" style="display: flex;">我是有底线的</divider>
+    <tabbar style="position:fixed" >
+      <tabbar-item v-for="info in complainStatus" :badge="info.statCounts.toString()" @on-item-click="statSelect(info.complainStat, info.order)" :key="info" >
+        <img slot="icon" :src="info.imageUrl">
+        <span slot="label">{{info.statName}}</span>
+      </tabbar-item>
+    </tabbar>
   </div>
 </template>
 
 <script>
   import Spinner from '../components/Spinner.vue'
   import InfiniteScroll from 'vue-infinite-scroll'
-  import {ViewBox, Cell, XHeader, Toast, Divider, Selector, Group} from 'vux'
+  import {ViewBox, Cell, XHeader, Toast, Divider, Selector, Group, Tabbar, TabbarItem} from 'vux'
   import Item from '../components/Item.vue'
   import * as api from '../api'
   import ComplainListModel from '../utils/ComplainListModel'
@@ -34,7 +39,9 @@
       Item,
       Divider,
       Selector,
-      Group
+      Group,
+      Tabbar,
+      TabbarItem
     },
     directives: {InfiniteScroll},
     data () {
@@ -56,12 +63,19 @@
         shopName: '',
         data: null,
         shops: [],
+        complainStatus: [],
         showSelect: true
+//        statuGroup: {},
+//        statuKeys: [],
+//        waitStat: true,
+//        doingStat: false,
+//        overStat: false,
+//        invalidStat: false
       }
     },
     created () {
       this.workerId = this.$route.query.workerId
-      this.data = new ComplainListModel(this.shopName, this.workerId)
+      this.data = new ComplainListModel(this.shopName, this.workerId, 1)
       this.$store.commit('INIT_WORKERID', this.workerId)
       this.$store.dispatch('getComplainList', this.data)
     },
@@ -78,6 +92,10 @@
         this.loading = true
         api.fetchSearchByWorkId(this.data, page, this.size)
           .then(res => {
+//            console.log(res.statuGroup.待处理)
+            if (page === 1) {
+              this.complainStatus = this.complainStatus.concat(res.complainStatus)
+            }
             this.show = true
             this.list = this.list.concat(res.list)
             this.shops = this.shops.concat(res.shops)
@@ -132,6 +150,27 @@
 //              this.loadingText = '数据加载失败: 服务器接口异常'
 //            }
 //          })
+      },
+      statSelect (status, order) {
+        document.body.scrollTop = 0
+        this.data.complainStat = status
+        this.busy = false
+        let length = this.complainStatus.length
+        for (var i = 0; i < length; i++) {
+          if (i === order - 1) {
+            this.complainStatus[i].imageUrl = this.complainStatus[i].imageUrl.replace('-1', '')
+          } else {
+            console.log(this.complainStatus[i].imageUrl.indexOf('-1'))
+            if (this.complainStatus[i].imageUrl.indexOf('-1') > 0) {
+            } else {
+              this.complainStatus[i].imageUrl = this.complainStatus[i].imageUrl.substring(0, this.complainStatus[i].imageUrl.length - 4) + '-1.png'
+            }
+          }
+        }
+        api.fetchSearchByWorkId(this.data, 1, this.size).then(res => {
+          this.list = res.list
+        })
+        this.$router.push('/complain/?workerId=' + this.workerId)
       }
     },
     destoryed () {
