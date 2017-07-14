@@ -59,7 +59,7 @@
     },
     methods: {
       onClick () {
-//        this.$store.commit(document.body.scrollTop)
+        this.$store.commit('ITEM_OFFSET', document.body.scrollTop)
         go(this.link, this.$router)
       }
     }

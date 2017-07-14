@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from '../store'
 
 Vue.use(Router)
 
@@ -32,14 +33,15 @@ const router = new Router({
   }
 })
 
-// router.beforeEach(function (to, from, next) {
-//   let workerId = to.query.workerId
-//   let fullPath = to.fullPath
-//   if (fullPath.indexOf('detail') < 0 && (workerId === null || workerId === undefined || workerId.length !== 5)) {
-//     window.alert('请输入正确的工号')
-//   } else {
-//     next()
-//   }
-// })
+router.beforeEach(function (to, from, next) {
+  let toPath = to.fullPath
+  let fromPath = from.fullPath
+  console.log('store:' + store.getters.scroll)
+  if (fromPath.indexOf('detail') > 0) {
+    document.body.scrollTop = store.getters.scroll
+  }
+  console.log(toPath + ',' + fromPath)
+  next()
+})
 
 export default router

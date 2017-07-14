@@ -10,7 +10,8 @@ const state = {
   busy: false,
   newIndex: 1,
   scroll: 0,
-  workerId: null
+  workerId: null,
+  list: []
 }
 
 const getters = {
@@ -21,7 +22,8 @@ const getters = {
   page: state => state.page,
   newIndex: state => state.newIndex,
   scroll: state => state.scroll,
-  workerId: state => state.workerId
+  workerId: state => state.workerId,
+  list: state => state.list
 }
 
 const mutations = {
@@ -43,6 +45,12 @@ const mutations = {
   },
   [type.ITEM_OFFSET] (state, data) {
     state.scroll = data
+  },
+  [type.COMPLAIN_PAGE_LIST] (state, data) {
+    state.list = state.list.concat(data)
+  },
+  [type.ITEM_PAGE] (state, data) {
+    state.page = data
   }
 }
 

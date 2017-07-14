@@ -24,3 +24,5 @@ export const CLEAN_SHOP_LIST = 'CLEAN_SHOP_LIST'
 export const SET_NEW_INDEX = 'SET_NEW_INDEX'
 // 页面跳转前位置
 export const ITEM_OFFSET = 'ITEM_OFFSET'
+// 页面跳转前页码
+export const ITEM_PAGE = 'ITEM_PAGE'

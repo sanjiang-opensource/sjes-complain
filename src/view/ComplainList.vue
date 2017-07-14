@@ -72,7 +72,6 @@
       }
     },
     created () {
-//      document.body.scrollTop = this.$store.getters.scroll
       this.workerId = this.$route.query.workerId
       this.data = new ComplainListModel(this.shopName, this.workerId, 1)
       this.$store.commit('INIT_WORKERID', this.workerId)
@@ -81,11 +80,23 @@
     mounted () {
       this.page = this.$store.getters.page
       this.size = this.$store.getters.size
+//      this.list = this.$store.getters.list
+    },
+    updated () {
+//      document.body.scrollTop = this.$store.getters.scroll
+    },
+    watch: {
+      $route (to, from) {
+        let toPath = to.fullPath
+        let fromPath = from.fullPath
+        console.log('toPath' + toPath + ', from:' + fromPath)
+      }
     },
     methods: {
       loadMore () {
         if (this.flag) {
-          let page = this.list.length / this.size + 1
+          let page = this.page
+          this.$store.commit('ITEM_PAGE', page)
           this.busy = true
           this.isScroll = true
           this.loading = true
@@ -100,10 +111,8 @@
           this.data.complainStat = complainStat
           api.fetchSearchByWorkId(this.data, page, this.size)
             .then(res => {
-              if (page === 1) {
-                this.complainStatus = []
-                this.complainStatus = this.complainStatus.concat(res.complainStatus)
-              }
+              this.$store.commit('COMPLAIN_PAGE_LIST', res.list)
+              this.complainStatus = res.complainStatus
               this.show = true
               this.list = this.list.concat(res.list)
               this.shops = this.shops.concat(res.shops)
@@ -121,7 +130,7 @@
               }
               this.loading = false
               this.isScroll = false
-              console.log(this.busy, this.isScroll)
+              this.page = page + 1
             }, (error) => {
               this.show = true
               this.loading = false
@@ -133,6 +142,7 @@
       },
       statSelect (status, order) {
         document.body.scrollTop = 0
+        this.$store.commit('ITEM_OFFSET', document.body.scrollTop)
         this.loading = true
         this.page = 1
         this.data.complainStat = status
