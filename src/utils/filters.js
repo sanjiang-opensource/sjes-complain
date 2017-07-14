@@ -39,3 +39,12 @@ Vue.filter('changeTitle', function (value) {
   }
   return overTimeName
 })
+Vue.filter('numberToString', function (value) {
+  if (value !== '' && value != null) {
+    return value.toString()
+  }
+  return ''
+})
+Vue.filter('dealImageUrl', function (value) {
+  return value.replace('-1', '')
+})

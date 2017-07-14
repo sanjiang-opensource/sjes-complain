@@ -1,4 +1,3 @@
-import * as api from '../../api'
 import * as type from '../mutation-types'
 
 const state = {
@@ -6,27 +5,26 @@ const state = {
   size: 10,
   totalCount: null,
   current: null,
-  list: [],
   shops: [],
   area: false,
   busy: false,
+  newIndex: 1,
+  scroll: 0,
   workerId: null
 }
 
 const getters = {
-  list: state => state.list,
   current: state => state.current,
   size: state => state.size,
   totalCount: state => state.totalCount,
   busy: state => state.busy,
-  workerId: state => state.workerId,
-  page: state => state.page
+  page: state => state.page,
+  newIndex: state => state.newIndex,
+  scroll: state => state.scroll,
+  workerId: state => state.workerId
 }
 
 const mutations = {
-  [type.COMPLAIN_PAGE_LIST] (state, data) {
-    state.list = data.list
-  },
   [type.CLEAN_LIST] (state) {
     state.current = null
     state.totalPage = null
@@ -39,16 +37,16 @@ const mutations = {
   },
   [type.INIT_WORKERID] (state, data) {
     state.workerId = data
+  },
+  [type.SET_NEW_INDEX] (state, data) {
+    state.newIndex = data
+  },
+  [type.ITEM_OFFSET] (state, data) {
+    state.scroll = data
   }
 }
 
 const actions = {
-  getComplainList ({commit}, res, page, size) {
-    api.fetchSearchByWorkId(res, page, size)
-      .then(data => {
-        commit(type.COMPLAIN_PAGE_LIST, data)
-      })
-  },
   [type.CLEAN_LIST] ({commit}) {
     commit(type.CLEAN_LIST)
   },

@@ -324,6 +324,7 @@
       },
       submitRes () {
         if (this.dealResult) {
+          console.log(this.workerId)
           this.$router.push('/complain/?workerId=' + this.workerId)
           this.$destroy()
         }
@@ -334,12 +335,10 @@
         this.imgUrl = imgUrl
       },
       call () {
-        console.log(1)
         window.location.href = 'tel://' + this.complainDetail.customerComplainWxModel.mobile
       }
     },
     destroyed () {
-//            this.$store.dispatch('CLEAN_DETAIL')
     }
   }
 </script>

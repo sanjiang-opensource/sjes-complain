@@ -9,9 +9,11 @@
     </section>
     <toast v-model="show" type="success" :text="loadingText"></toast>
     <divider v-if="end" style="display: flex;">我是有底线的</divider>
-    <tabbar style="position:fixed" >
-      <tabbar-item v-for="info in complainStatus" :badge="info.statCounts" @on-item-click="statSelect(info.complainStat, info.order)" :key="info" >
+    <tabbar style="position:fixed">
+      <tabbar-item v-for="(info, index) in complainStatus" :badge="info.statCounts | numberToString" @on-item-click="statSelect(info.complainStat, info.order)" :key="info"
+                   :selected="selected === (index + 1)">
         <img slot="icon" :src="info.imageUrl">
+        <img slot="icon-active" :src="info.imageUrl  | dealImageUrl">
         <span slot="label">{{info.statName}}</span>
       </tabbar-item>
     </tabbar>
@@ -61,20 +63,17 @@
         data: null,
         shops: [],
         complainStatus: [],
-        showSelect: true
-//        statuGroup: {},
-//        statuKeys: [],
-//        waitStat: true,
-//        doingStat: false,
-//        overStat: false,
-//        invalidStat: false
+        showSelect: true,
+        selected: 1,
+        flag: true
       }
     },
     created () {
+//      document.body.scrollTop = this.$store.getters.scroll
       this.workerId = this.$route.query.workerId
       this.data = new ComplainListModel(this.shopName, this.workerId, 1)
       this.$store.commit('INIT_WORKERID', this.workerId)
-      this.$store.dispatch('getComplainList', this.data)
+      this.selected = this.$store.getters.newIndex
     },
     mounted () {
       this.page = this.$store.getters.page
@@ -82,86 +81,73 @@
     },
     methods: {
       loadMore () {
-        let page = this.list.length / this.size + 1
-        this.busy = true
-        this.isScroll = true
-        this.loading = true
-        api.fetchSearchByWorkId(this.data, page, this.size)
-          .then(res => {
-            if (page === 1) {
-              this.complainStatus = this.complainStatus.concat(res.complainStatus)
-            }
-            this.show = true
-            this.list = this.list.concat(res.list)
-            this.shops = this.shops.concat(res.shops)
-            let totalCount = res.totalCount
-            if (this.list.length < totalCount) {
-              this.busy = false
-            }
-            let endListCount = totalCount - this.list.length
-            if (endListCount === 0) {
-              this.loadingText = '已加载全部数据'
-              this.end = true
-            }
-            this.loading = false
-            this.isScroll = false
-          }, (error) => {
-            this.show = true
-            this.loading = false
-            if (error.response.status === 500) {
-              this.loadingText = '数据加载失败: 服务器接口异常'
-            }
-          })
-//      },
-//      changeShop () {
-//        this.loadingText = '数据加载完成'
-//        this.end = false
-//        this.data.receiveDept = this.shopName
-//        this.busy = true
-//        this.isScroll = true
-//        this.loading = true
-//        api.fetchSearchByWorkId(this.data, 1, this.size)
-//          .then(res => {
-//            this.show = true
-//            this.list = res.list
-//            console.log(this.list)
-//            this.shops = res.shops
-//            let totalCount = res.totalCount
-//            if (this.list.length < totalCount) {
-//              this.busy = false
-//            }
-//            let endListCount = totalCount - this.list.length
-//            if (endListCount === 0) {
-//              this.loadingText = '已加载全部数据'
-//              this.end = true
-//            }
-//            this.loading = false
-//            this.isScroll = false
-//          }, (error) => {
-//            this.show = true
-//            this.loading = false
-//            if (error.response.status === 500) {
-//              this.loadingText = '数据加载失败: 服务器接口异常'
-//            }
-//          })
+        if (this.flag) {
+          let page = this.list.length / this.size + 1
+          this.busy = true
+          this.isScroll = true
+          this.loading = true
+          let complainStat = 1
+          if (this.selected === 2) {
+            complainStat = 4
+          } else if (this.selected === 3) {
+            complainStat = 2
+          } else if (this.selected === 4) {
+            complainStat = 3
+          }
+          this.data.complainStat = complainStat
+          api.fetchSearchByWorkId(this.data, page, this.size)
+            .then(res => {
+              if (page === 1) {
+                this.complainStatus = []
+                this.complainStatus = this.complainStatus.concat(res.complainStatus)
+              }
+              this.show = true
+              this.list = this.list.concat(res.list)
+              this.shops = this.shops.concat(res.shops)
+              let totalCount = res.totalCount
+              if (this.list.length < totalCount) {
+                this.busy = false
+                this.flag = true
+              }
+              let endListCount = totalCount - this.list.length
+              if (endListCount === 0) {
+                this.loadingText = '已加载全部数据'
+                this.flag = false
+                this.busy = true
+                this.end = true
+              }
+              this.loading = false
+              this.isScroll = false
+              console.log(this.busy, this.isScroll)
+            }, (error) => {
+              this.show = true
+              this.loading = false
+              if (error.response.status === 500) {
+                this.loadingText = '数据加载失败: 服务器接口异常'
+              }
+            })
+        }
       },
       statSelect (status, order) {
         document.body.scrollTop = 0
+        this.loading = true
+        this.page = 1
         this.data.complainStat = status
-        this.busy = false
-        let length = this.complainStatus.length
-        for (var i = 0; i < length; i++) {
-          if (i === order - 1) {
-            this.complainStatus[i].imageUrl = this.complainStatus[i].imageUrl.replace('-1', '')
-          } else {
-            if (this.complainStatus[i].imageUrl.indexOf('-1') > 0) {
-            } else {
-              this.complainStatus[i].imageUrl = this.complainStatus[i].imageUrl.substring(0, this.complainStatus[i].imageUrl.length - 4) + '-1.png'
-            }
-          }
-        }
-        api.fetchSearchByWorkId(this.data, 1, this.size).then(res => {
+        this.$store.commit('SET_NEW_INDEX', order)
+        this.flag = false
+        this.selected = order
+        api.fetchSearchByWorkId(this.data, this.page, this.size).then(res => {
           this.list = res.list
+          this.loading = false
+          this.show = true
+          if (res.totalCount > 10) {
+            console.log(res.totalCount)
+            this.busy = false
+            this.flag = true
+            this.loadingText = '数据加载完成'
+          } else {
+            this.loadingText = '已加载全部数据'
+          }
         })
         this.$router.push('/complain/?workerId=' + this.workerId)
       }

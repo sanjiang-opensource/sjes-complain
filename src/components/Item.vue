@@ -59,6 +59,7 @@
     },
     methods: {
       onClick () {
+//        this.$store.commit(document.body.scrollTop)
         go(this.link, this.$router)
       }
     }
