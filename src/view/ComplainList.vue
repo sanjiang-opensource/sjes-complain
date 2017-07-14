@@ -1,6 +1,9 @@
 <template>
   <div style="background-color: #eeeeee">
     <section class="grid" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10" drapload-key="ascroll" drapload-up="loadMore ()">
+      <!--<group v-show="showSelect" style="height: 50px;background-color: white">-->
+        <!--<selector title="受理商场" placeholder="请选择受理商场" v-model="shopName" :options="shops" @on-change="changeShop"></selector>-->
+      <!--</group>-->
       <item v-for="info in list"
             style="display: flex;flex-direction: column;margin-bottom: 20px;position: relative;width: 100%;background-color: white" :item="info" :key="info"
             :link="'/complain/detail/'+info.id+'/'+workerId">
@@ -112,10 +115,12 @@
               if (endListCount === 0) {
                 this.loadingText = '已加载全部数据'
                 this.flag = false
+                this.busy = true
                 this.end = true
               }
               this.loading = false
               this.isScroll = false
+              console.log(this.busy, this.isScroll)
             }, (error) => {
               this.show = true
               this.loading = false
@@ -127,13 +132,20 @@
       },
       statSelect (status, order) {
         document.body.scrollTop = 0
+        this.loading = true
         this.page = 1
         this.data.complainStat = status
-        this.busy = false
         this.$store.commit('SET_NEW_INDEX', order)
+        this.flag = false
         this.selected = order
         api.fetchSearchByWorkId(this.data, this.page, this.size).then(res => {
           this.list = res.list
+          this.loading = false
+          if (res.totalCount > 10) {
+            console.log(res.totalCount)
+            this.busy = false
+            this.flag = true
+          }
         })
         this.$router.push('/complain/?workerId=' + this.workerId)
       }
