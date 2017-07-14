@@ -1,5 +1,5 @@
-const getters = {}
-
-export default {
-  getters
+const getters = {
+  workerId: state => state.workerId
 }
+
+export default getters

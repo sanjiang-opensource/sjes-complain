@@ -20,3 +20,5 @@ export const CLOSE_COMPLAIN = 'CLOSE_COMPLAIN'
 export const SHOP_LIST = 'SHOP_LIST'
 // 清空门店列表
 export const CLEAN_SHOP_LIST = 'CLEAN_SHOP_LIST'
+// TAB_BAR 选中
+export const SET_NEW_INDEX = 'SET_NEW_INDEX'
