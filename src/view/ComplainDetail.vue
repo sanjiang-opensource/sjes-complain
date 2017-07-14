@@ -324,6 +324,7 @@
       },
       submitRes () {
         if (this.dealResult) {
+          console.log(this.workerId)
           this.$router.push('/complain/?workerId=' + this.workerId)
           this.$destroy()
         }

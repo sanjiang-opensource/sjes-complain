@@ -8,7 +8,9 @@ const state = {
   shops: [],
   area: false,
   busy: false,
-  newIndex: 1
+  newIndex: 1,
+  scroll: 0,
+  workerId: null
 }
 
 const getters = {
@@ -17,7 +19,9 @@ const getters = {
   totalCount: state => state.totalCount,
   busy: state => state.busy,
   page: state => state.page,
-  newIndex: state => state.newIndex
+  newIndex: state => state.newIndex,
+  scroll: state => state.scroll,
+  workerId: state => state.workerId
 }
 
 const mutations = {
@@ -36,6 +40,9 @@ const mutations = {
   },
   [type.SET_NEW_INDEX] (state, data) {
     state.newIndex = data
+  },
+  [type.ITEM_OFFSET] (state, data) {
+    state.scroll = data
   }
 }
 

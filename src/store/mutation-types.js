@@ -22,3 +22,5 @@ export const SHOP_LIST = 'SHOP_LIST'
 export const CLEAN_SHOP_LIST = 'CLEAN_SHOP_LIST'
 // TAB_BAR 选中
 export const SET_NEW_INDEX = 'SET_NEW_INDEX'
+// 页面跳转前位置
+export const ITEM_OFFSET = 'ITEM_OFFSET'

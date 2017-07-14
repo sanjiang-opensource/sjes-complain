@@ -72,6 +72,7 @@
       }
     },
     created () {
+//      document.body.scrollTop = this.$store.getters.scroll
       this.workerId = this.$route.query.workerId
       this.data = new ComplainListModel(this.shopName, this.workerId, 1)
       this.$store.commit('INIT_WORKERID', this.workerId)
@@ -141,10 +142,14 @@
         api.fetchSearchByWorkId(this.data, this.page, this.size).then(res => {
           this.list = res.list
           this.loading = false
+          this.show = true
           if (res.totalCount > 10) {
             console.log(res.totalCount)
             this.busy = false
             this.flag = true
+            this.loadingText = '数据加载完成'
+          } else {
+            this.loadingText = '已加载全部数据'
           }
         })
         this.$router.push('/complain/?workerId=' + this.workerId)
