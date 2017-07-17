@@ -111,7 +111,11 @@
               }
               let endListCount = totalCount - this.list.length
               if (endListCount === 0) {
-                this.loadingText = '已加载全部数据'
+                if (this.workerId === 'null') {
+                  this.loadingText = '工号不存在'
+                } else {
+                  this.loadingText = '已加载全部数据'
+                }
                 this.flag = false
                 this.busy = true
                 this.end = true
@@ -146,7 +150,11 @@
             this.flag = true
             this.loadingText = '数据加载完成'
           } else {
-            this.loadingText = '已加载全部数据'
+            if (this.workerId === 'null') {
+              this.loadingText = '工号不存在'
+            } else {
+              this.loadingText = '已加载全部数据'
+            }
           }
         })
         this.$router.push('/complain/?workerId=' + this.workerId)
