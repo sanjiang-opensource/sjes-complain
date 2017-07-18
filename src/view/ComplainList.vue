@@ -86,6 +86,9 @@
       loadMore () {
         if (this.flag) {
           let page = this.list.length / this.size + 1
+          if (page > 1) {
+            this.$store.commit('SCROLL_Y', window.scrollY)
+          }
           this.busy = true
           this.isScroll = true
           this.loading = true
@@ -139,6 +142,7 @@
       },
       statSelect (status, order) {
         window.scrollTo(0, 0)
+        this.$store.commit('SCROLL_Y', 0)
         this.loading = true
         this.page = 1
         this.data.complainStat = status
