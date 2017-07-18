@@ -28,19 +28,13 @@ const router = new Router({
     if (savedPosition) {
       return savedPosition
     } else {
-      return { x: 0, y: 0 }
+      return { x: 0, y: store.getters.scrollY }
     }
   }
 })
 
 router.beforeEach(function (to, from, next) {
-  let toPath = to.fullPath
-  let fromPath = from.fullPath
-  console.log('store:' + store.getters.scroll)
-  if (fromPath.indexOf('detail') > 0) {
-    document.body.scrollTop = store.getters.scroll
-  }
-  console.log(toPath + ',' + fromPath)
+  window.scrollTo(0, store.getters.scrollY)
   next()
 })
 

@@ -9,7 +9,7 @@ const state = {
   area: false,
   busy: false,
   newIndex: 1,
-  scroll: 0,
+  scrollY: 0,
   workerId: null,
   list: []
 }
@@ -21,7 +21,7 @@ const getters = {
   busy: state => state.busy,
   page: state => state.page,
   newIndex: state => state.newIndex,
-  scroll: state => state.scroll,
+  scrollY: state => state.scrollY,
   workerId: state => state.workerId,
   list: state => state.list
 }
@@ -33,6 +33,7 @@ const mutations = {
     state.list = []
     state.page = 1
     state.size = 10
+    state.scrollY = 0
   },
   [type.SET_INFINITE_BUSY] (state, data) {
     state.busy = data
@@ -46,11 +47,11 @@ const mutations = {
   [type.ITEM_OFFSET] (state, data) {
     state.scroll = data
   },
-  [type.COMPLAIN_PAGE_LIST] (state, data) {
-    state.list = state.list.concat(data)
+  [type.CACHE_LIST] (state, data) {
+    state.list = data
   },
-  [type.ITEM_PAGE] (state, data) {
-    state.page = data
+  [type.SCROLL_Y] (state, data) {
+    state.scrollY = data
   }
 }
 

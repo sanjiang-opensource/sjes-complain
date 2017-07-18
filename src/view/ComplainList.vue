@@ -1,11 +1,10 @@
 <template>
   <div style="background-color: #eeeeee">
-    <section class="grid" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10" drapload-key="ascroll" drapload-up="loadMore ()">
-      <!--<group v-show="showSelect" style="height: 50px;background-color: white">-->
-        <!--<selector title="受理商场" placeholder="请选择受理商场" v-model="shopName" :options="shops" @on-change="changeShop"></selector>-->
-      <!--</group>-->
+    <section class="grid" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10"
+             drapload-key="ascroll" drapload-up="loadMore ()">
       <item v-for="info in list"
-            style="display: flex;flex-direction: column;margin-bottom: 20px;position: relative;width: 100%;background-color: white" :item="info" :key="info"
+            style="display: flex;flex-direction: column;margin-bottom: 20px;position: relative;width: 100%;background-color: white"
+            :item="info" :key="info"
             :link="'/complain/detail/'+info.id+'/'+workerId">
       </item>
       <Spinner :show="loading"></Spinner>
@@ -13,7 +12,8 @@
     <toast v-model="show" type="success" :text="loadingText"></toast>
     <divider v-if="end" style="display: flex;">我是有底线的</divider>
     <tabbar style="position:fixed">
-      <tabbar-item v-for="(info, index) in complainStatus" :badge="info.statCounts | numberToString" @on-item-click="statSelect(info.complainStat, info.order)" :key="info"
+      <tabbar-item v-for="(info, index) in complainStatus" :badge="info.statCounts | numberToString"
+                   @on-item-click="statSelect(info.complainStat, info.order)" :key="info"
                    :selected="selected === (index + 1)">
         <img slot="icon" :src="info.imageUrl">
         <img slot="icon-active" :src="info.imageUrl  | dealImageUrl">
@@ -80,23 +80,12 @@
     mounted () {
       this.page = this.$store.getters.page
       this.size = this.$store.getters.size
-//      this.list = this.$store.getters.list
-    },
-    updated () {
-//      document.body.scrollTop = this.$store.getters.scroll
-    },
-    watch: {
-      $route (to, from) {
-        let toPath = to.fullPath
-        let fromPath = from.fullPath
-        console.log('toPath' + toPath + ', from:' + fromPath)
-      }
+      console.log('mounted')
     },
     methods: {
       loadMore () {
         if (this.flag) {
-          let page = this.page
-          this.$store.commit('ITEM_PAGE', page)
+          let page = this.list.length / this.size + 1
           this.busy = true
           this.isScroll = true
           this.loading = true
@@ -111,9 +100,12 @@
           this.data.complainStat = complainStat
           api.fetchSearchByWorkId(this.data, page, this.size)
             .then(res => {
-              this.$store.commit('COMPLAIN_PAGE_LIST', res.list)
-              this.complainStatus = res.complainStatus
+              if (page === 1) {
+                this.complainStatus = []
+                this.complainStatus = this.complainStatus.concat(res.complainStatus)
+              }
               this.show = true
+              this.list = this.$store.getters.list
               this.list = this.list.concat(res.list)
               this.shops = this.shops.concat(res.shops)
               let totalCount = res.totalCount
@@ -123,14 +115,19 @@
               }
               let endListCount = totalCount - this.list.length
               if (endListCount === 0) {
-                this.loadingText = '已加载全部数据'
+                if (this.workerId === 'null') {
+                  this.loadingText = '工号不存在'
+                } else {
+                  this.loadingText = '已加载全部数据'
+                }
                 this.flag = false
                 this.busy = true
                 this.end = true
               }
+              this.$store.commit('CACHE_LIST', this.list)
               this.loading = false
               this.isScroll = false
-              this.page = page + 1
+              console.log('loadMore')
             }, (error) => {
               this.show = true
               this.loading = false
@@ -141,8 +138,7 @@
         }
       },
       statSelect (status, order) {
-        document.body.scrollTop = 0
-        this.$store.commit('ITEM_OFFSET', document.body.scrollTop)
+        window.scrollTo(0, 0)
         this.loading = true
         this.page = 1
         this.data.complainStat = status
@@ -154,16 +150,24 @@
           this.loading = false
           this.show = true
           if (res.totalCount > 10) {
-            console.log(res.totalCount)
             this.busy = false
             this.flag = true
             this.loadingText = '数据加载完成'
           } else {
-            this.loadingText = '已加载全部数据'
+            if (this.workerId === 'null') {
+              this.loadingText = '工号不存在'
+            } else {
+              this.loadingText = '已加载全部数据'
+            }
           }
+          this.$store.commit('CACHE_LIST', this.list)
         })
         this.$router.push('/complain/?workerId=' + this.workerId)
       }
+    },
+    updated () {
+      window.scrollTo(0, this.$store.getters.scrollY)
+      console.log(window.scrollY)
     },
     destoryed () {
       this.$store.dispatch('CLEAN_LIST')

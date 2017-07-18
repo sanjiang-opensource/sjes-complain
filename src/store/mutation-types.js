@@ -10,12 +10,12 @@ export const CLEAN_LIST = 'CLEAN_LIST'
 export const CLEAN_DETAIL = 'CLEAN_DETAIL'
 //
 export const SET_INFINITE_BUSY = 'SET_INFINITE_BUSY'
-// 转单
-export const RETURN_COMPLAIN = 'RETURN_COMPLAIN'
+// 缓存列表
+export const CACHE_LIST = 'CACHE_LIST'
 // 处理
 export const SUBMIT_COMPLAIN = 'SUBMIT_COMPLAIN'
-// 关闭
-export const CLOSE_COMPLAIN = 'CLOSE_COMPLAIN'
+// 设定Y滚动条
+export const SCROLL_Y = 'SCROLL_Y'
 // 获取门店列表
 export const SHOP_LIST = 'SHOP_LIST'
 // 清空门店列表
@@ -24,5 +24,4 @@ export const CLEAN_SHOP_LIST = 'CLEAN_SHOP_LIST'
 export const SET_NEW_INDEX = 'SET_NEW_INDEX'
 // 页面跳转前位置
 export const ITEM_OFFSET = 'ITEM_OFFSET'
-// 页面跳转前页码
-export const ITEM_PAGE = 'ITEM_PAGE'
+//
