@@ -226,7 +226,8 @@
         let complainStat = this.complainDetail.customerComplainWxModel.complainStat
         let receiveDeptNum = this.complainDetail.customerComplainWxModel.receiveDeptNum
         let indexOf = this.complainDetail.shopIds.indexOf(receiveDeptNum)
-        return indexOf >= 0 && (complainStat === 1 || complainStat === 4)
+        let index = this.complainDetail.shopIds.indexOf('000000')
+        return (indexOf >= 0 || index >= 0) && (complainStat === 1 || complainStat === 4)
       },
       isShowDetilList () {
         return this.complainDetail.complainResults.length !== 0
