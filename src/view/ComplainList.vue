@@ -108,7 +108,9 @@
                 this.complainStatus = this.complainStatus.concat(res.complainStatus)
               }
               this.show = true
-              this.list = this.$store.getters.list
+              if (page > 1) {
+                this.list = this.$store.getters.list.splice(this.$store.getters.list.length - res.list.length, res.list.length)
+              }
               this.list = this.list.concat(res.list)
               this.shops = this.shops.concat(res.shops)
               let totalCount = res.totalCount
@@ -130,7 +132,6 @@
               this.$store.commit('CACHE_LIST', this.list)
               this.loading = false
               this.isScroll = false
-              console.log('loadMore')
             }, (error) => {
               this.show = true
               this.loading = false
