@@ -1,6 +1,6 @@
 import axios from '../utils/diyaxios'
 
-const HOST = process.env.NODE_ENV === 'production' ? 'http://weixin.sanjiang.com/admin/customerComplain' : 'http://weixin-dev.sanjiang.com/admin/customerComplain'
+const HOST = process.env.NODE_ENV === 'production' ? 'http://qyweixin.sanjiang.com/admin/customerComplain' : 'http://qyweixin.sanjiang.com/admin/customerComplain'
 
 export function fetch (url) {
   return new Promise((resolve, reject) => {
@@ -24,6 +24,10 @@ export function submit (url) {
       })
   })
 }
+
+// export function sendErrorToWeixin(res) {
+//
+// }
 
 // 根据工号分页显示
 export function fetchSearchByWorkId (res, page = 1, limit = 10) {
